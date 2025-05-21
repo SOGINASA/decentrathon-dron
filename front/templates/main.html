@@ -20,6 +20,7 @@
   </header>
 
   <main>
+    <!-- Видео-панель -->
     <section class="video-panel">
       <video
         id="cameraStream"
@@ -30,6 +31,7 @@
       ></video>
     </section>
 
+    <!-- Инфо-панель -->
     <section class="info-panel">
       <div class="telemetry">
         <h3>Телеметрия</h3>
@@ -59,16 +61,17 @@
       </div>
     </section>
 
-    <section id="map" class="map-panel"></section>
+    <!-- Располагаем карту внизу страницы -->
+    <section id="map" class="map-panel map-fullscreen"></section>
   </main>
 
   <footer>&copy; 2025 Drone Hackathon</footer>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <!-- Socket.IO клиент по CDN -->
+  <!-- Socket.IO клиент -->
   <script src="https://cdn.socket.io/4.7.0/socket.io.min.js"></script>
-  <!-- Ваш основной скрипт -->
+  <!-- Основной скрипт -->
   <script src="../JS/main.js"></script>
 </body>
 </html>

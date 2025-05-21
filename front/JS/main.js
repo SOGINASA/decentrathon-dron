@@ -1,35 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1) Подключаем Socket.IO (если бэкенд на том же хосте и порту)
-  const socket = io(); // либо io('http://localhost:3000')
+  // Socket.IO
+  const socket = io(); 
+  socket.on('connect', () => console.log('Socket.IO connected:', socket.id));
 
-  socket.on('connect', () => {
-    console.log('Socket.IO connected:', socket.id);
-  });
-
-  // 2) Инициализация карты
-  const map = L.map('map').setView([51.0, 71.4], 13);
+  // Инициализация карты на фиксированных координатах
+  const coords = [54.865699, 69.134297];
+  const map = L.map('map').setView(coords, 15);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19, attribution: '&copy; OSM'
+    maxZoom: 19, attribution: '&copy; OpenStreetMap'
   }).addTo(map);
-  window.droneMarker = L.marker([51.0, 71.4]).addTo(map);
+  L.marker(coords).addTo(map)
+    .bindPopup('Текущее положение дрона')
+    .openPopup();
 
-  // 3) Обработка телеметрии
+  // Обновление телеметрии и карты при новых данных
   socket.on('telemetry', data => {
     document.getElementById('altitude').textContent = data.altitude;
     document.getElementById('speed').textContent    = data.speed;
     document.getElementById('battery').textContent  = data.battery;
     document.getElementById('coords').textContent   =
       `${data.lat.toFixed(5)}, ${data.lng.toFixed(5)}`;
-
-    // Обновляем маркер
-    const latlng = [data.lat, data.lng];
-    window.droneMarker.setLatLng(latlng);
+    map.setView([data.lat, data.lng]);
   });
 
-  // 4) Переключение режимов ввода
+  // Код управления (клавиатура/джойстик) без изменений...
   let inputMode = 'joystick';
   const toggleBtn = document.getElementById('toggleInput');
-  toggleBtn.addEventListener('click', () => {
+  toggleBtn && toggleBtn.addEventListener('click', () => {
     inputMode = inputMode === 'joystick' ? 'keyboard' : 'joystick';
     toggleBtn.textContent = inputMode === 'joystick'
       ? 'Использовать клавиатуру'
@@ -37,35 +34,22 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleBtn.classList.toggle('active', inputMode === 'keyboard');
     console.log('Input mode:', inputMode);
   });
-
-  // 5) Джойстик-кнопки
-  document.querySelectorAll('.controls button[data-cmd]').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.querySelectorAll('.controls button[data-cmd]')
+    .forEach(btn => btn.addEventListener('click', () => {
       if (inputMode !== 'joystick') return;
       const cmd = btn.dataset.cmd;
       socket.emit('control', { command: cmd });
       console.log('Joystick command:', cmd);
-    });
-  });
-
-  // 6) Клавиатурные команды
+    }));
   window.addEventListener('keydown', e => {
     if (inputMode !== 'keyboard') return;
-    const key = e.key.toUpperCase();
-    const mapKeyToCmd = {
-      W: 'UP',
-      S: 'DOWN',
-      A: 'RIGHT',
-      D: 'LEFT',
-      Z: 'TILT_FORWARD',
-      X: 'TILT_BACK',
-      C: 'TILT_LEFT',
-      V: 'TILT_RIGHT'
-    };
-    const cmd = mapKeyToCmd[key];
+    const M = { W:'UP', S:'DOWN', A:'RIGHT', D:'LEFT',
+                Z:'TILT_FORWARD', X:'TILT_BACK',
+                C:'TILT_LEFT', V:'TILT_RIGHT' };
+    const cmd = M[e.key.toUpperCase()];
     if (cmd) {
       socket.emit('control', { command: cmd });
-      console.log(`Keyboard command: ${key} → ${cmd}`);
+      console.log(`Keyboard command: ${e.key.toUpperCase()} → ${cmd}`);
     }
   });
 });
