@@ -1,0 +1,341 @@
+/* ===================== */
+/*    Общие сбросы       */
+/* ===================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    height: 100%;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    background: #121212;
+    color: #ececec;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+  }
+  
+  /* ===================== */
+  /*      Хедер/футер      */
+  /* ===================== */
+  header, footer {
+    background: #1a1a1a;
+    text-align: center;
+    color: #777;
+    padding: .75rem;
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+  }
+  .logo {
+    color: #e63946;
+    font-size: 1.75rem;
+    font-weight: bold;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: #ececec;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background .2s, color .2s;
+  }
+  .nav-links a.active,
+  .nav-links a:hover {
+    background: rgba(230, 57, 70, 0.2);
+    color: #e63946;
+  }
+  
+  /* ===================== */
+  /*     Основной макет    */
+  /* ===================== */
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-areas:
+      "video info"
+      "map map";
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: auto 2fr;
+    gap: 1rem;
+    padding: 1rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  /* Видео-панель 16:9 */
+  .video-panel {
+    grid-area: video;
+    position: relative;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .video-panel::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%;
+  }
+  .video-panel video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Инфо-панель */
+  .info-panel {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .telemetry, .controls {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  }
+  .telemetry h3, .controls h3 {
+    color: #e63946;
+    margin-bottom: .5rem;
+    font-size: 1.25rem;
+  }
+  .telemetry ul {
+    list-style: none;
+  }
+  .telemetry li {
+    margin: .5rem 0;
+    font-size: 1rem;
+  }
+  .telemetry span {
+    font-weight: bold;
+    color: #fff;
+  }
+  
+  /* Переключатель ввода */
+  .controls .toggle-btn {
+    width: 100%;
+    padding: .75rem;
+    margin-bottom: 1rem;
+    background: #444;
+    color: #ececec;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .controls .toggle-btn.active {
+    background: #e63946;
+  }
+  
+  /* Джойстик-кнопки */
+  .controls .btn-row {
+    display: flex;
+    gap: .75rem;
+  }
+  .controls button[data-cmd] {
+    flex: 1;
+    padding: 1rem;
+    background: #e63946;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+  }
+  .controls button[data-cmd]:hover {
+    background: #d62828;
+  }
+  .controls button[data-cmd]:active {
+    transform: scale(.97);
+  }
+  
+  /* Карта */
+  .map-panel {
+    grid-area: map;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    height: 75vh;
+    width: 100%;
+  }
+  #map {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* ===================== */
+  /*    Адаптивность       */
+  /* ===================== */
+  /* Tablet */
+  @media (max-width: 900px) {
+    main {
+      grid-template-areas:
+        "video"
+        "info"
+        "map";
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto 1fr;
+    }
+    .map-panel {
+      height: 60vh;
+    }
+  }
+  /* Mobile */
+  @media (max-width: 600px) {
+    main {
+      display: flex;
+      flex-direction: column;
+      padding: .5rem;
+      gap: 1rem;
+    }
+    .video-panel, .info-panel, .map-panel {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .telemetry h3, .controls h3 {
+      font-size: 1.2rem;
+    }
+    .controls .toggle-btn,
+    .controls button[data-cmd] {
+      width: 100%;
+      padding: 1.25rem;
+      font-size: 1.1rem;
+    }
+    .controls .btn-row {
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .map-panel {
+      height: 45vh;
+    }
+    nav {
+      flex-direction: column;
+      padding: .75rem;
+    }
+    .nav-links {
+      flex-direction: column;
+      gap: .75rem;
+      margin-top: .5rem;
+    }
+    .nav-links a {
+      font-size: 1.1rem;
+    }
+  }
+/* === Список миссий и карточки === */
+.missions-list {
+    max-width: 800px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+  }
+  .missions-list h2 {
+    color: #e63946;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  .mission-card {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  }
+  .mission-card h3 {
+    margin-bottom: .5rem;
+    color: #ececec;
+  }
+  .mission-card p {
+    margin: .25rem 0;
+    color: #ccc;
+  }
+  .mission-card a.coords {
+    color: #e63946;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .mission-card a.coords:hover {
+    text-decoration: underline;
+  }
+  
+  /* === Модалка с картой === */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+  }
+  .modal-content {
+    position: relative;
+    background: #1e1e1e;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    height: 70vh;
+    margin: 5% auto;
+    padding: 0;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.7);
+  }
+  .modal-content .close {
+    position: absolute;
+    right: 1rem; top: 1rem;
+    color: #ececec;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  #modalMap {
+    width: 100%;
+    height: 100%;
+    border-radius: 0 0 8px 8px;
+  }
+/* === Стили для страницы логов === */
+.logs-container {
+    max-width: 1000px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+  }
+  .logs-container h2 {
+    color: #e63946;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  .log-list {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+    height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  .log-entry {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+  .log-entry:nth-child(odd) {
+    background: rgba(255,255,255,0.03);
+    padding: 0.25rem;
+    border-radius: 4px;
+  }
+      

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drone Control Dashboard</title>
+  <link rel="stylesheet" href="../static/main.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">DroneControl</div>
+      <ul class="nav-links">
+        <li><a href="main.html" class="active">Мониторинг</a></li>
+        <li><a href="missions.html">Миссии</a></li>
+        <li><a href="logs.html">Логи</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="video-panel">
+      <video
+        id="cameraStream"
+        autoplay
+        muted
+        playsinline
+        src="http://<RASPBERRY_IP>:8080/stream.mjpg"
+      ></video>
+    </section>
+
+    <section class="info-panel">
+      <div class="telemetry">
+        <h3>Телеметрия</h3>
+        <ul>
+          <li>Высота: <span id="altitude">—</span> м</li>
+          <li>Скорость: <span id="speed">—</span> м/с</li>
+          <li>Заряд: <span id="battery">—</span>%</li>
+          <li>Координаты: <span id="coords">—</span></li>
+        </ul>
+      </div>
+
+      <div class="controls">
+        <h3>Управление</h3>
+        <button class="toggle-btn" id="toggleInput">Использовать клавиатуру</button>
+        <div class="btn-row">
+          <button data-cmd="TAKE_OFF">Взлёт</button>
+          <button data-cmd="LAND">Посадка</button>
+        </div>
+        <div class="btn-row">
+          <button data-cmd="UP">Вверх</button>
+          <button data-cmd="DOWN">Вниз</button>
+        </div>
+        <div class="btn-row">
+          <button data-cmd="LEFT">Влево</button>
+          <button data-cmd="RIGHT">Вправо</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="map" class="map-panel"></section>
+  </main>
+
+  <footer>&copy; 2025 Drone Hackathon</footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Socket.IO клиент по CDN -->
+  <script src="https://cdn.socket.io/4.7.0/socket.io.min.js"></script>
+  <!-- Ваш основной скрипт -->
+  <script src="../JS/main.js"></script>
+</body>
+</html>
