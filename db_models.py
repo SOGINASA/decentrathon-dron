@@ -11,6 +11,9 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(100), unique=True)
+    city_lat = db.Column(db.String(100), nullable=False)
+
+    
     is_admin = False
     
     def set_password(self, password):
@@ -44,6 +47,8 @@ class Order(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     start_location = db.Column(db.String(100), nullable=False)
     end_location = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(100), nullable=False) # 'in_progress', 'completed', 'in_queue'
+    cost = db.Column(db.Integer, nullable=False)
 
 if __name__ == '__main__':
     db.create_all()
