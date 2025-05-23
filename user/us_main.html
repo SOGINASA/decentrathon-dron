@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DroneGo — Сервис доставки</title>
+  <link rel="stylesheet" href="us_main.css" />
+</head>
+<body>
+    <!-- SIDEBAR -->
+<aside class="dg-sidebar">
+    <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
+    <ul class="dg-sidebar-list">
+      <li><a href="profile.html">Профиль</a></li>
+      <li><a href="payment.html">Способ оплаты</a></li>
+      <li><a href="pilot.html">Работа пилотом</a></li>
+      <li><a href="support.html">Служба поддержки</a></li>
+    </ul>
+  </aside>
+  <div class="dg-overlay"></div>
+  
+  <!-- HEADER -->
+  <header class="dg-header">
+    <button class="dg-btn-menu" aria-label="Меню">☰</button>
+    <div class="dg-current-address">
+      <span>Ваш адрес:</span>
+      <strong>Чайковского 21, подъезд 2</strong>
+    </div>
+    <button class="dg-btn-profile" aria-label="Профиль"
+        onclick="location.href='profile.html'">
+  <img src="6522516.png" alt="Профиль" class="dg-profile-icon"/>
+</button>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dg-main">
+
+    <!-- GRID СЕРВИСОВ -->
+    <section class="dg-services">
+      <div class="dg-service-item"
+           onclick="location.href='order.html'">
+        <img src="air-drone-icon.svg"
+             alt=""
+             class="dg-service-icon"/>
+        <span class="dg-service-label">Новая доставка</span>
+      </div>
+      <div class="dg-service-item"
+           onclick="location.href='my_zakazi.html'">
+        <img src="history.png"
+             alt=""
+             class="dg-service-icon"/>
+        <span class="dg-service-label">Мои заказы</span>
+      </div>
+      <div class="dg-service-item"
+           onclick="location.href='tracking.html'">
+        <img src="tracking.png"
+             alt=""
+             class="dg-service-icon"/>
+        <span class="dg-service-label">Трекинг</span>
+      </div>
+    </section>
+
+    <!-- БОЛЬШАЯ КНОПКА ЗАПРОСА МАРШРУТА -->
+    <section class="dg-route-request">
+      <button class="dg-btn-route"
+              onclick="location.href='order.html'">
+        Куда доставить?
+      </button>
+    </section>
+
+    <!-- СПИСОК НЕДАВНИХ АДРЕСОВ -->
+    <section class="dg-recent">
+      <h2 class="dg-section-title">Недавние адреса</h2>
+      <ul class="dg-recent-list">
+        <li class="dg-recent-item"
+            data-time="7 мин">
+          Нурсултана Назарбаева 234
+        </li>
+        <li class="dg-recent-item"
+            data-time="13 мин">
+          Жалела Кизатова 1
+        </li>
+        <li class="dg-recent-item"
+            data-time="12 мин">
+          Школа-гимназия, ул. Тауелсиздик, 327Г
+        </li>
+      </ul>
+    </section>
+
+    <!-- ПРОМО-БАННЕР -->
+    <section class="dg-promo">
+      <div class="dg-promo-content">
+        <h3>Попробуйте доставку</h3>
+        <p>Отправляйте вещи по городу быстро и удобно</p>
+      </div>
+      <img src="4320278.png"
+           alt="Доставка"
+           class="dg-promo-img"/>
+    </section>
+
+  </main>
+
+  <script src="us_main.js"></script>
+
+  <footer class="dg-footer">
+    &copy; 2025 Drone Hackathon by
+    <span style="color: #e63946;"><b>ITshechka</b></span>
+  </footer>
+
+</body>
+</html>

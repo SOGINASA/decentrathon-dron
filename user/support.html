@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Служба поддержки — DroneGo</title>
+  <link rel="stylesheet" href="us_main.css"/>
+  <style>
+    /* ===== CONTAINER ===== */
+    .controls {
+      max-width: 480px;
+      margin: 2rem auto;
+      background: #1e1e1e;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      font-family: 'Poppins', sans-serif;
+      color: #ececec;
+    }
+    .controls h3 {
+      margin-bottom: 1rem;
+      color: #e63946;
+      font-size: 1.5rem;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .controls p {
+      color: #ccc;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+    /* ===== FORM FIELDS ===== */
+    .controls form label {
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .controls form input,
+    .controls form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      background: #121212;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #ececec;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    .controls form input:focus,
+    .controls form textarea:focus {
+      outline: none;
+      border-color: #e63946;
+    }
+    /* ===== BUTTONS ===== */
+    .controls form .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .controls form button {
+      flex: 1;
+      padding: 0.75rem;
+      background: #e63946;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .controls form button:hover {
+      background: #d62828;
+    }
+    .controls form button:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="dg-sidebar">
+    <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
+    <ul class="dg-sidebar-list">
+      <li><a href="us_main.html">Главная</a></li>
+      <li><a href="profile.html">Профиль</a></li>
+      <li><a href="payment.html">Способ оплаты</a></li>
+      <li><a href="pilot.html">Работа пилотом</a></li>
+    </ul>
+  </aside>
+  <div class="dg-overlay"></div>
+
+  <!-- HEADER -->
+  <header class="dg-header">
+    <button class="dg-btn-menu" aria-label="Меню">☰</button>
+    <div class="dg-current-address">
+      <span>Ваш адрес:</span>
+      <strong>Чайковского 21, подъезд 2</strong>
+    </div>
+    <button class="dg-btn-profile" aria-label="Профиль">👤</button>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dg-main">
+    <section class="controls">
+      <h3>Служба поддержки</h3>
+      <p>Есть вопрос или нужна помощь? Опишите вашу проблему, и мы свяжемся с вами в ближайшее время.</p>
+      <form id="supportForm">
+        <label for="support-email">
+          Ваш e-mail<br/>
+          <input type="email" id="support-email" name="email"
+                 placeholder="you@example.com" required>
+        </label>
+        <label for="support-subject">
+          Тема обращения<br/>
+          <input type="text" id="support-subject" name="subject"
+                 placeholder="Краткое описание проблемы" required>
+        </label>
+        <label for="support-message">
+          Сообщение<br/>
+          <textarea id="support-message" name="message"
+                    placeholder="Опишите подробно вашу проблему" rows="5"
+                    required></textarea>
+        </label>
+        <div class="btn-row">
+          <button type="submit">Отправить</button>
+          <button type="button" onclick="location.href='index.html'">
+            Отмена
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="dg-footer">
+    &copy; 2025 Drone Hackathon by
+    <span style="color: #e63946;"><b>ITshechka</b></span>
+  </footer>
+
+  <script src="us_main.js"></script>
+  <script>
+    // Обработка отправки формы
+    document.getElementById('supportForm')
+      .addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Здесь будет логика отправки на сервер
+        alert('Ваше сообщение отправлено. Спасибо!');
+        this.reset();
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Мои заказы — DroneGo</title>
+  <link rel="stylesheet" href="us_main.css" />
+</head>
+<body>
+    <!-- SIDEBAR -->
+<aside class="dg-sidebar">
+    <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
+    <ul class="dg-sidebar-list">
+      <li><a href="us_main.html">Главная</a></li>
+      <li><a href="profile.html">Профиль</a></li>
+      <li><a href="payment.html">Способ оплаты</a></li>
+      <li><a href="pilot.html">Работа пилотом</a></li>
+      <li><a href="support.html">Служба поддержки</a></li>
+    </ul>
+  </aside>
+  <div class="dg-overlay"></div>
+
+    <!-- HEADER -->
+    <header class="dg-header">
+      <button class="dg-btn-menu" aria-label="Меню">☰</button>
+      <div class="dg-current-address">
+        <span>Ваш адрес:</span>
+        <strong>Чайковского 21, подъезд 2</strong>
+      </div>
+      <button class="dg-btn-profile" aria-label="Профиль"
+        onclick="location.href='profile.html'">
+  <img src="6522516.png" alt="Профиль" class="dg-profile-icon"/>
+</button>
+    </header>
+  
+    <!-- MAIN: Блок со всеми заказами -->
+    <main class="dg-main orders-container">
+      <h2>Мои заказы</h2>
+  
+      <!-- В обработке -->
+      <div class="order-category">
+        <h3>В обработке</h3>
+        <div class="orders-grid">
+          <div class="order-card">
+            <div class="order-header">
+              <h4>Заказ #1001</h4>
+              <span class="badge badge-pending">В обработке</span>
+            </div>
+            <p><strong>От:</strong> ул. Ленина, 10</p>
+            <p><strong>До:</strong> пр. Независимости, 5</p>
+            <p><strong>Время:</strong> 23 мая, 12:45</p>
+          </div>
+          <div class="order-card">
+            <div class="order-header">
+              <h4>Заказ #1004</h4>
+              <span class="badge badge-pending">В обработке</span>
+            </div>
+            <p><strong>От:</strong> ул. Гоголя, 15</p>
+            <p><strong>До:</strong> ул. Жамбыла, 42</p>
+            <p><strong>Время:</strong> 23 мая, 14:10</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- У курьера -->
+      <div class="order-category">
+        <h3>У курьера</h3>
+        <div class="orders-grid">
+          <div class="order-card">
+            <div class="order-header">
+              <h4>Заказ #1002</h4>
+              <span class="badge badge-delivering">У курьера</span>
+            </div>
+            <p><strong>От:</strong> ул. Байтурсынова, 7</p>
+            <p><strong>До:</strong> ул. Айтеке би, 30</p>
+            <p><strong>Время:</strong> 23 мая, 11:20</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Выполнен -->
+      <div class="order-category">
+        <h3>Выполнен</h3>
+        <div class="orders-grid">
+          <div class="order-card">
+            <div class="order-header">
+              <h4>Заказ #1000</h4>
+              <span class="badge badge-completed">Выполнен</span>
+            </div>
+            <p><strong>От:</strong> ул. Кирова, 22</p>
+            <p><strong>До:</strong> ул. Островского, 18</p>
+            <p><strong>Время:</strong> 22 мая, 16:05</p>
+          </div>
+          <div class="order-card">
+            <div class="order-header">
+              <h4>Заказ #999</h4>
+              <span class="badge badge-completed">Выполнен</span>
+            </div>
+            <p><strong>От:</strong> пр. Мира, 3</p>
+            <p><strong>До:</strong> ул. Бухтарминская, 11</p>
+            <p><strong>Время:</strong> 22 мая, 14:50</p>
+          </div>
+        </div>
+      </div>
+  
+    </main>
+  
+    <script src="us_main.js"></script>
+
+    <!-- FOOTER -->
+    <footer class="dg-footer">
+      &copy; 2025 Drone Hackathon by <span style="color: #e63946;"><b>ITshechka</b></span>
+    </footer>
+  
+  </body>
+</html>
