@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>регистрация администратора</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}"/>
+</head>
+<body class="auth-page">
+  <header>
+    <nav>
+      <div class="logo">DroneControl</div>
+      <!-- <ul class="nav-links">
+        <li><a href="main.html">Мониторинг</a></li>
+        <li><a href="missions.html">Миссии</a></li>
+        <li><a href="logs.html">Логи</a></li>
+        <li><a href="drones.html">Дроны</a></li>
+        <li><a href="pilots.html">Пилоты</a></li>
+      </ul> -->
+    </nav>
+  </header>
+
+  <main>
+    <section class="controls">
+      <h3>Регистрация нового пользователя</h3>
+      <form id="registerForm" method="post" action="{{ url_for('auth.register_admin') }}">
+        <label for="reg-name">Полное имя<br/>
+          <input id="reg-name" type="text" name="name" placeholder="Иванов Иван Иванович" required>
+        </label>
+        <label for="reg-email">E-mail<br/>
+          <input id="reg-email" type="email" name="email" placeholder="ivanov@example.com" required>
+        </label>
+        <label for="reg-password">Пароль<br/>
+          <input id="reg-password" type="password" name="password" placeholder="••••••••" required>
+        </label>
+        <label for="reg-password2">Повторите пароль<br/>
+          <input id="reg-password2" type="password" name="password2" placeholder="••••••••" required>
+        </label>
+        <button class="toggle-btn" type="submit">Зарегистрироваться</button>
+        <p style="margin-top:1rem; text-align:center;">
+          Уже есть аккаунт? <a href="{{ url_for('auth.login') }}" style="color:#e63946;">Войти</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Drone Hackathon</footer>
+
+  <!-- <script src="../JS/auth.js"></script> --> <!-- я не знаю, нет тут такого файла -->
+</body>
+</html>

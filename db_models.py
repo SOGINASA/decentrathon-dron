@@ -36,6 +36,7 @@ class Drone(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mark = db.Column(db.String(100), primary_key=True, nullable=False)
     model = db.Column(db.String(100), nullable=False)
+    coordinates = db.Column(db.String(100), nullable=False)
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)

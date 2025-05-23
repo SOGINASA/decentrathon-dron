@@ -14,7 +14,7 @@ def login():
         password = request.form.get('password')
         
         user = User.query.filter_by(username=username).first()
-        print(user.username)
+
         admin = Admin.query.filter_by(username=username).first()
 
         if admin and admin.check_password(password):
@@ -26,7 +26,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             session['username'] = username
-            session['is_admin'] = 'user'
+            session['is_admin'] = False
             return redirect('/')
         else:
             return render_template('login.html', error="Неверное имя пользователя или пароль")
@@ -75,7 +75,7 @@ def register_admin():
         existing_user = User.query.filter_by(username=username).first()
         existing_admin = Admin.query.filter_by(username=username).first()
         if existing_user or existing_admin:
-            return render_template('register.html')
+            return render_template('register_admin.html')
         
         # Создание нового пользователя
         new_admin = Admin(username=username, email=email)
@@ -94,7 +94,7 @@ def register_admin():
         session['is_admin'] = True
         return redirect('/')
     
-    return render_template('register.html')
+    return render_template('register_admin.html')
 
 
 # Выход

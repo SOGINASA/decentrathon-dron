@@ -23,8 +23,6 @@
               <li><a href="{{ url_for('auth.login') }}">Вход</a></li>
               <li><a href="{{ url_for('auth.register') }}">Регистрация</a></li>
             {% endif %}
-            {{ session['is_admin'] }}
-            {{ session['username'] }}
           </ul>
         </nav>
       </header>
