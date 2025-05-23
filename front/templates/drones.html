@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Дроны — DroneControl</title>
+  <link rel="stylesheet" href="../static/main.css"/>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">DroneControl</div>
+      <ul class="nav-links">
+        <li><a href="main.html">Мониторинг</a></li>
+        <li><a href="missions.html">Миссии</a></li>
+        <li><a href="logs.html">Логи</a></li>
+        <li><a href="drones.html" class="active">Дроны</a></li>
+        <li><a href="pilots.html">Пилоты</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Форма добавления -->
+    <section class="controls">
+      <h3>Добавить дрон</h3>
+      <form id="droneForm">
+        <label>Марка<br/>
+          <input type="text" name="brand" placeholder="Напр. DJI" required>
+        </label><br/><br/>
+        <label>Модель<br/>
+          <input type="text" name="model" placeholder="Напр. Phantom 4" required>
+        </label><br/><br/>
+        <label>Серийный номер<br/>
+          <input type="text" name="serial" placeholder="SN123456" required>
+        </label><br/><br/>
+        <button class="toggle-btn" type="submit">Добавить</button>
+      </form>
+    </section>
+
+    <!-- Список дронов -->
+    <section class="missions-list">
+      <h2>Список дронов</h2>
+
+      <div class="mission-card">
+        <h3>Дрон #1</h3>
+        <p>Марка: DJI</p>
+        <p>Модель: Phantom 4</p>
+        <p>Серийный номер: SN12345</p>
+      </div>
+
+      <!-- в дальнейшем эти карточки будут генерироваться из JS -->
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Drone Hackathon</footer>
+
+  <script src="../JS/drones.js"></script>
+</body>
+</html>

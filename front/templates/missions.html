@@ -11,46 +11,81 @@
   />
 </head>
 <body class="missions-page">
-  <header>
-    <nav>
-      <div class="logo">DroneControl</div>
-      <ul class="nav-links">
-        <li><a href="main.html">Мониторинг</a></li>
-        <li><a href="missions.html" class="active">Миссии</a></li>
-        <li><a href="logs.html">Логи</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <section class="missions-list">
-      <h2>Список миссий</h2>
-
-      <!-- Пример одной заявки -->
-      <div class="mission-card">
-        <h3>Заявка #1</h3>
-        <p>Координаты:
-          <a href="#" class="coords" data-lat="51.16050" data-lng="71.47040">
-            51.16050, 71.47040
-          </a>
-        </p>
-        <p>Адрес: проспект Достык 100</p>
-        <p>Время доставки: 22 мая 2025, 15:00</p>
+    <header>
+      <nav>
+        <div class="logo">DroneControl</div>
+        <ul class="nav-links">
+          <li><a href="main.html">Мониторинг</a></li>
+          <li><a href="missions.html" class="active">Миссии</a></li>
+          <li><a href="logs.html">Логи</a></li>
+          <li><a href="drones.html">Дроны</a></li>
+          <li><a href="pilots.html">Пилоты</a></li>
+        </ul>
+      </nav>
+    </header>
+  
+    <main>
+      <section class="missions-list">
+        <h2>Список миссий</h2>
+  
+        <!-- Заявка в статусе "Ожидание" -->
+        <div class="mission-card">
+          <div class="mission-header">
+            <h3>Заявка #1</h3>
+            <span class="status-badge status-pending">Ожидание</span>
+          </div>
+          <p><strong>Координаты:</strong>
+            <a href="#" class="coords" data-lat="51.16050" data-lng="71.47040">
+              51.16050, 71.47040
+            </a>
+          </p>
+          <p><strong>Адрес:</strong> проспект Достык 100</p>
+          <p><strong>Время доставки:</strong> 22 мая 2025, 15:00</p>
+        </div>
+  
+        <!-- Заявка в статусе "Одобрено" -->
+        <div class="mission-card">
+          <div class="mission-header">
+            <h3>Заявка #2</h3>
+            <span class="status-badge status-approved">Одобрено</span>
+          </div>
+          <p><strong>Координаты:</strong>
+            <a href="#" class="coords" data-lat="51.17000" data-lng="71.48000">
+              51.17000, 71.48000
+            </a>
+          </p>
+          <p><strong>Адрес:</strong> ул. Абая, 55</p>
+          <p><strong>Время доставки:</strong> 23 мая 2025, 10:00</p>
+        </div>
+  
+        <!-- Заявка в статусе "Отклонено" -->
+        <div class="mission-card">
+          <div class="mission-header">
+            <h3>Заявка #3</h3>
+            <span class="status-badge status-rejected">Отклонено</span>
+          </div>
+          <p><strong>Координаты:</strong>
+            <a href="#" class="coords" data-lat="51.18000" data-lng="71.49000">
+              51.18000, 71.49000
+            </a>
+          </p>
+          <p><strong>Адрес:</strong> пр. Тауелсиздик, 12</p>
+          <p><strong>Время доставки:</strong> 24 мая 2025, 14:30</p>
+        </div>
+      </section>
+  
+      <!-- Модалка с картой -->
+      <div id="mapModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="modalMap"></div>
+        </div>
       </div>
-    </section>
-
-    <!-- Модалка с картой -->
-    <div id="mapModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div id="modalMap"></div>
-      </div>
-    </div>
-  </main>
-
-  <footer>&copy; 2025 Drone Hackathon</footer>
-
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="../JS/missions.js"></script>
-</body>
+    </main>
+  
+    <footer>&copy; 2025 Drone Hackathon by <span style="color: #e63946;"><b>ITshechka</b></span></footer>
+  
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="../JS/missions.js"></script>
+  </body>
 </html>
