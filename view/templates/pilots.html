@@ -1,22 +1,52 @@
-<!-- мы решили автоматически управлять -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Пилоты — DroneControl</title>
-  <link rel="stylesheet" href="../static/main.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
 </head>
 <body>
   <header>
     <nav>
       <div class="logo">DroneControl</div>
       <ul class="nav-links">
-        <li><a href="main.html">Мониторинг</a></li>
-        <li><a href="missions.html">Миссии</a></li>
-        <li><a href="logs.html">Логи</a></li>
-        <li><a href="drones.html">Дроны</a></li>
-        <li><a href="pilots.html" class="active">Пилоты</a></li>
+        <li>
+          <a href="{{ url_for('index') }}"
+             class="{% if request.endpoint=='index' %}active{% endif %}">
+            Мониторинг
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('missions') }}"
+             class="{% if request.endpoint=='missions' %}active{% endif %}">
+            Миссии
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('logs') }}"
+             class="{% if request.endpoint=='logs' %}active{% endif %}">
+            Логи
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('drones') }}"
+             class="{% if request.endpoint=='drones' %}active{% endif %}">
+            Дроны
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('pilots') }}"
+             class="{% if request.endpoint=='pilots' %}active{% endif %}">
+            Пилоты
+          </a>
+        </li>
+        {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('auth.logout') }}">Выход</a></li>
+        {% else %}
+          <li><a href="{{ url_for('auth.login') }}">Вход</a></li>
+          <li><a href="{{ url_for('auth.register') }}">Регистрация</a></li>
+        {% endif %}
       </ul>
     </nav>
   </header>
@@ -25,12 +55,14 @@
     <!-- Форма добавления -->
     <section class="controls">
       <h3>Добавить пилота</h3>
-      <form id="pilotForm">
-        <label>ФИО<br/>
-          <input type="text" name="name" placeholder="Иванов Иван Иванович" required>
+      <form id="pilotForm" method="post" action="{{ url_for('pilots') }}">
+        <label for="pilot-name">ФИО<br/>
+          <input id="pilot-name" type="text" name="name"
+                 placeholder="Иванов Иван Иванович" required>
         </label><br/><br/>
-        <label>Контакты<br/>
-          <input type="text" name="contact" placeholder="+7 777 123-45-67" required>
+        <label for="pilot-contact">Контакты<br/>
+          <input id="pilot-contact" type="text" name="contact"
+                 placeholder="+7 777 123-45-67" required>
         </label><br/><br/>
         <button class="toggle-btn" type="submit">Добавить</button>
       </form>
@@ -40,18 +72,20 @@
     <section class="missions-list">
       <h2>Список пилотов</h2>
 
-      <div class="mission-card">
-        <h3>Пилот #1</h3>
-        <p>ФИО: Иванов Иван Иванович</p>
-        <p>Контакты: +7 777 123-45-67</p>
-      </div>
-
-      <!-- в дальнейшем эти карточки будут генерироваться из JS -->
+      {% if pilots %}
+        {% for pilot in pilots %}
+          <div class="mission-card">
+            <h3>Пилот #{{ pilot.id }}</h3>
+            <p>ФИО: {{ pilot.name }}</p>
+            <p>Контакты: {{ pilot.contact }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>Пилоты не найдены.</p>
+      {% endif %}
     </section>
   </main>
 
   <footer>&copy; 2025 Drone Hackathon</footer>
-
-  <script src="../JS/pilots.js"></script>
 </body>
 </html>

@@ -3,11 +3,14 @@ import os
 from flask_login import LoginManager, current_user
 
 from db_models import db, User, Admin, Drone, Order
-
 from routes import auth_bp
 
 # Инициализация приложения
-app = Flask(__name__, template_folder='view/templates', static_folder='view/static')
+app = Flask(
+    __name__,
+    template_folder='view/templates',
+    static_folder='view/static'
+)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat_history.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -24,19 +27,44 @@ def load_user(user_id):
         return None
     return User.query.get(int(user_id))
 
-# Главная страница
-@app.route('/')
+# Главная страница (Мониторинг)
+@app.route('/', endpoint='index')
 def index():
-    if current_user.is_authenticated:
-        if session.get('is_admin'):
-            return render_template('main.html')
-        else:
-            return render_template('main.html')#потом поменяем
-    return redirect('/auth/register')
+    if not current_user.is_authenticated:
+        return redirect('/auth/register')
+    # здесь позже можно разграничивать admin/user
+    return render_template('main.html')
 
+# Страница миссий
+@app.route('/missions', endpoint='missions')
+def missions():
+    if not current_user.is_authenticated:
+        return redirect('/auth/login')
+    return render_template('missions.html')
 
+# Страница логов
+@app.route('/logs', endpoint='logs')
+def logs():
+    if not current_user.is_authenticated:
+        return redirect('/auth/login')
+    return render_template('logs.html')
+
+# Страница дронов
+@app.route('/drones', endpoint='drones')
+def drones():
+    if not current_user.is_authenticated:
+        return redirect('/auth/login')
+    return render_template('drones.html')
+
+# Страница пилотов
+@app.route('/pilots', endpoint='pilots')
+def pilots():
+    if not current_user.is_authenticated:
+        return redirect('/auth/login')
+    return render_template('pilots.html')
+
+# Роуты аутентификации (login, register, logout)
 app.register_blueprint(auth_bp, url_prefix='/auth')
-
 
 if __name__ == '__main__':
     with app.app_context():
