@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Служба поддержки — DroneGo</title>
-  <link rel="stylesheet" href="us_main.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='us_main.css')}}"/>
   <style>
     /* ===== CONTAINER ===== */
     .controls {
@@ -87,10 +87,10 @@
   <aside class="dg-sidebar">
     <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
     <ul class="dg-sidebar-list">
-      <li><a href="us_main.html">Главная</a></li>
-      <li><a href="profile.html">Профиль</a></li>
-      <li><a href="payment.html">Способ оплаты</a></li>
-      <li><a href="pilot.html">Работа пилотом</a></li>
+      <li><a href="/">Главная</a></li>
+      <li><a href="{{ url_for('user.profile')}}">Профиль</a></li>
+      <li><a href="#">Способ оплаты</a></li>
+      <li><a href="#">Работа пилотом</a></li>
     </ul>
   </aside>
   <div class="dg-overlay"></div>
@@ -143,7 +143,7 @@
     <span style="color: #e63946;"><b>ITshechka</b></span>
   </footer>
 
-  <script src="us_main.js"></script>
+  <script src="{{ url_for('static', filename='us_main.js')}}"></script>
   <script>
     // Обработка отправки формы
     document.getElementById('supportForm')

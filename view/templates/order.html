@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Новая доставка — DroneGo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='order.css') }}"/>
+  <!-- Яндекс.Карты API -->
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=bbedf925-4a42-423f-b41b-cc99d421a629&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+
+  <!-- Кнопка «Назад» -->
+  <button class="btn-back" onclick="location.href='/user/dashboard'" aria-label="Назад">&larr;</button>
+
+  <!-- Карта -->
+  <div id="map" class="order-map"></div>
+
+  <!-- Нижняя панель с полями и кнопками -->
+  <!-- <div class="order-panel">
+    <div class="field-group">
+      <input type="text" id="start-address" placeholder="Начальный адрес" name="start_location"/>
+      <button id="pick-start" class="btn-small">Выбрать на карте</button>
+    </div>
+    <div class="field-group">
+      <input type="text" id="end-address" placeholder="Конечный адрес" name="end_location"/>
+      <button id="pick-end" class="btn-small">Выбрать на карте</button>
+    </div>
+    <button id="order-btn" class="btn-order" disabled>
+      Заказать — <span id="price">тут будет цена</span>
+    </button>
+  </div> -->
+
+  <form method="post" action="{{ url_for('user.create_order') }}" id="orderForm" class="order-panel">
+    <div class="field-group">
+      <input type="text" id="start-address" placeholder="Начальный адрес" name="start_location" required/>
+      <button type="button" id="pick-start" class="btn-small">Выбрать на карте</button>
+    </div>
+    <div class="field-group">
+      <input type="text" id="end-address" placeholder="Конечный адрес" name="end_location" required/>
+      <button type="button" id="pick-end" class="btn-small">Выбрать на карте</button>
+    </div>
+  
+    <!-- Скрытые поля для координат -->
+    <input type="hidden" name="start_lat" id="start-lat">
+    <input type="hidden" name="start_lon" id="start-lon">
+    <input type="hidden" name="end_lat" id="end-lat">
+    <input type="hidden" name="end_lon" id="end-lon">
+    <input type="hidden" name="cost" id="cost">
+  
+    <button id="order-btn" class="btn-order" disabled>
+      Заказать — <span id="price">тут будет цена</span>
+    </button>
+  </form>
+
+  <script src="{{ url_for('static', filename='order.js') }}"></script>
+</body>
+</html>

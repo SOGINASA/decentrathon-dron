@@ -4,17 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DroneGo — Сервис доставки</title>
-  <link rel="stylesheet" href="us_main.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='us_main.css') }}" />
 </head>
 <body>
     <!-- SIDEBAR -->
 <aside class="dg-sidebar">
     <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
     <ul class="dg-sidebar-list">
-      <li><a href="profile.html">Профиль</a></li>
-      <li><a href="payment.html">Способ оплаты</a></li>
-      <li><a href="pilot.html">Работа пилотом</a></li>
-      <li><a href="support.html">Служба поддержки</a></li>
+      <li><a href="/user/profile">Профиль</a></li>
+      <li><a href="#">Способ оплаты</a></li>
+      <li><a href="#">Работа пилотом</a></li>
+      <li><a href="#">Служба поддержки</a></li>
+      {% if current_user.is_authenticated %}
+        <li><a href="/logout">Выйти</a></li>
+      {% else %}
+        <li><a href="/login">Войти</a></li>
+        <li><a href="/register">Регистрация</a></li>
+      {% endif %}
     </ul>
   </aside>
   <div class="dg-overlay"></div>
@@ -27,8 +33,8 @@
       <strong>Чайковского 21, подъезд 2</strong>
     </div>
     <button class="dg-btn-profile" aria-label="Профиль"
-        onclick="location.href='profile.html'">
-  <img src="6522516.png" alt="Профиль" class="dg-profile-icon"/>
+        onclick="location.href='/user/profile'">
+  <img src="{{ url_for('static', filename='6522516.png')}}" alt="Профиль" class="dg-profile-icon"/>
 </button>
   </header>
 
@@ -38,22 +44,22 @@
     <!-- GRID СЕРВИСОВ -->
     <section class="dg-services">
       <div class="dg-service-item"
-           onclick="location.href='order.html'">
-        <img src="air-drone-icon.svg"
+           onclick="location.href='/user/create_order'">
+        <img src="{{ url_for('static', filename='air-drone-icon.svg')}}"
              alt=""
              class="dg-service-icon"/>
         <span class="dg-service-label">Новая доставка</span>
       </div>
       <div class="dg-service-item"
-           onclick="location.href='my_zakazi.html'">
-        <img src="history.png"
+           onclick="location.href='/user/queue'">
+        <img src="{{ url_for('static', filename='history.png')}}"
              alt=""
              class="dg-service-icon"/>
         <span class="dg-service-label">Мои заказы</span>
       </div>
       <div class="dg-service-item"
            onclick="location.href='tracking.html'">
-        <img src="tracking.png"
+        <img src="{{ url_for('static', filename='tracking.png')}}"
              alt=""
              class="dg-service-icon"/>
         <span class="dg-service-label">Трекинг</span>
@@ -63,7 +69,7 @@
     <!-- БОЛЬШАЯ КНОПКА ЗАПРОСА МАРШРУТА -->
     <section class="dg-route-request">
       <button class="dg-btn-route"
-              onclick="location.href='order.html'">
+              onclick="location.href='/user/create_order'">
         Куда доставить?
       </button>
     </section>
@@ -93,14 +99,14 @@
         <h3>Попробуйте доставку</h3>
         <p>Отправляйте вещи по городу быстро и удобно</p>
       </div>
-      <img src="4320278.png"
+      <img src="{{ url_for('static', filename='4320278.png')}}"
            alt="Доставка"
            class="dg-promo-img"/>
     </section>
 
   </main>
 
-  <script src="us_main.js"></script>
+  <script src="{{ url_for('static', filename='us_main.js')}}"></script>
 
   <footer class="dg-footer">
     &copy; 2025 Drone Hackathon by

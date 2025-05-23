@@ -90,10 +90,10 @@
   <aside class="dg-sidebar">
     <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
     <ul class="dg-sidebar-list">
-      <li><a href="us_main.html">Главная</a></li>
-      <li><a href="profile.html">Профиль</a></li>
-      <li><a href="payment.html">Способ оплаты</a></li>
-      <li><a href="support.html">Служба поддержки</a></li>
+      <li><a href="/">Главная</a></li>
+      <li><a href="{{ url_for('user.profile')}}">Профиль</a></li>
+      <li><a href="#">Способ оплаты</a></li>
+      <li><a href="#">Служба поддержки</a></li>
     </ul>
   </aside>
   <div class="dg-overlay"></div>
@@ -166,7 +166,7 @@
     <span style="color: #e63946;"><b>ITshechka</b></span>
   </footer>
 
-  <script src="us_main.js"></script>
+  <script src="{{ url_for('static', filename='us_main.js')}}"></script>
   <script>
     document.getElementById('togglePilot').addEventListener('click', e => {
       if (e.target.textContent.includes('Включить')) {

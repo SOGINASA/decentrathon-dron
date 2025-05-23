@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Регистрация — DroneControl</title>
-  <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
 </head>
 <body class="auth-page">
   <header>
@@ -23,20 +23,39 @@
   <main>
     <section class="controls">
       <h3>Регистрация нового пользователя</h3>
+
+      {% if error %}
+        <p style="color: red; text-align: center;">{{ error }}</p>
+      {% endif %}
+
       <form id="registerForm" method="post" action="{{ url_for('auth.register') }}">
         <label for="reg-name">Полное имя<br/>
           <input id="reg-name" type="text" name="name" placeholder="Иванов Иван Иванович" required>
         </label>
+
         <label for="reg-email">E-mail<br/>
           <input id="reg-email" type="email" name="email" placeholder="ivanov@example.com" required>
         </label>
+
         <label for="reg-password">Пароль<br/>
           <input id="reg-password" type="password" name="password" placeholder="••••••••" required>
         </label>
+
         <label for="reg-password2">Повторите пароль<br/>
           <input id="reg-password2" type="password" name="password2" placeholder="••••••••" required>
         </label>
+
+        <label for="reg-city">Город<br/>
+          <select id="reg-city" name="city" required>
+            <option disabled selected value="">Выберите город</option>
+            {% for city in cities %}
+              <option value="{{ city.name }}">{{ city.name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
         <button class="toggle-btn" type="submit">Зарегистрироваться</button>
+
         <p style="margin-top:1rem; text-align:center;">
           Уже есть аккаунт? <a href="{{ url_for('auth.login') }}" style="color:#e63946;">Войти</a>
         </p>

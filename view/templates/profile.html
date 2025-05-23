@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Профиль — DroneGo</title>
-  <link rel="stylesheet" href="us_main.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='us_main.css') }}" />
   <style>
     /* === Стили для формы профиля === */
     .controls {
@@ -73,10 +73,10 @@
   <aside class="dg-sidebar">
     <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
     <ul class="dg-sidebar-list">
-      <li><a href="us_main.html">Главная</a></li>
-      <li><a href="payment.html">Способ оплаты</a></li>
-      <li><a href="pilot.html">Работа пилотом</a></li>
-      <li><a href="support.html">Служба поддержки</a></li>
+      <li><a href="/">Главная</a></li>
+      <li><a href="#">Способ оплаты</a></li>
+      <li><a href="#">Работа пилотом</a></li>
+      <li><a href="#">Служба поддержки</a></li>
     </ul>
   </aside>
   <div class="dg-overlay"></div>
@@ -95,7 +95,7 @@
   <main class="dg-main">
     <section class="controls">
       <h3>Редактирование профиля</h3>
-      <form id="profileForm">
+      <form id="profileForm" method="post" action="{{ url_for('user.profile') }}">
         <label for="name">
           Имя и Фамилия<br/>
           <input type="text" id="name" name="name"
@@ -106,16 +106,6 @@
           <input type="email" id="email" name="email"
                  placeholder="ivanov@example.com" required>
         </label>
-        <label for="phone">
-          Телефон<br/>
-          <input type="tel" id="phone" name="phone"
-                 placeholder="+7 777 123-45-67" required>
-        </label>
-        <label for="card-number">
-          Номер карты<br/>
-          <input type="text" id="card-number" name="card-number"
-                 placeholder="•••• •••• •••• ••••" required>
-        </label>
         <label for="password">
           Новый пароль<br/>
           <input type="password" id="password" name="password"
@@ -123,7 +113,7 @@
         </label>
         <div class="btn-row">
           <button type="submit">Сохранить</button>
-          <button type="button" onclick="location.href='index.html'">
+          <button type="button" onclick="location.href='/'">
             Отмена
           </button>
         </div>
@@ -137,6 +127,6 @@
     <span style="color: #e63946;"><b>ITshechka</b></span>
   </footer>
 
-  <script src="us_main.js"></script>
+  <script src="{{ url_for('static', filename='us_main.js') }}"></script>
 </body>
 </html>

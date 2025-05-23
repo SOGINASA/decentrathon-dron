@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Логи — DroneControl</title>
-  <link rel="stylesheet" href="../static/main.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
 </head>
 <body>
     <header>
@@ -63,6 +63,6 @@
   <!-- Socket.IO client -->
   <script src="https://cdn.socket.io/4.7.0/socket.io.min.js"></script>
   <!-- Наш скрипт логов -->
-  <script src="../JS/logs.js"></script>
+  <script src="{{ url_for('static', filename='logs.js') }}"></script>
 </body>
 </html>

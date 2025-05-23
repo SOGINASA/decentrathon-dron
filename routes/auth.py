@@ -35,21 +35,44 @@ def login():
 
 # Страница регистрации
 def register():
+    popular_cities_kz = [
+        {"name": "Алматы", "lat": 43.238949, "lon": 76.889709},
+        {"name": "Астана", "lat": 51.160523, "lon": 71.470356},
+        {"name": "Шымкент", "lat": 42.341736, "lon": 69.590099},
+        {"name": "Караганда", "lat": 49.8047, "lon": 73.1094},
+        {"name": "Актобе", "lat": 50.2839, "lon": 57.166},
+        {"name": "Тараз", "lat": 42.9, "lon": 71.3667},
+        {"name": "Павлодар", "lat": 52.2871, "lon": 76.9674},
+        {"name": "Усть-Каменогорск", "lat": 49.9574, "lon": 82.6142},
+        {"name": "Кызылорда", "lat": 44.8488, "lon": 65.4823},
+        {"name": "Семей", "lat": 50.411, "lon": 80.2275},
+        {"name": "Петропавловск", "lat": 54.8706, "lon": 69.1913}
+    ]
+
     if request.method == 'POST':
         username = request.form.get('name')
         password = request.form.get('password')
         email = request.form.get('email')
-        
-        # Проверка, существует ли пользователь
+        selected_city = request.form.get('city')
+
         existing_user = User.query.filter_by(username=username).first()
         existing_admin = Admin.query.filter_by(username=username).first()
         if existing_user or existing_admin:
-            return render_template('register.html')
-        
-        # Создание нового пользователя
-        new_user = User(username=username, email=email)
+            return render_template('register.html', cities=popular_cities_kz, error="Пользователь уже существует")
+
+        # Получение координат города
+        city_data = next((city for city in popular_cities_kz if city["name"] == selected_city), None)
+        if not city_data:
+            return render_template('register.html', cities=popular_cities_kz, error="Выберите корректный город")
+
+        new_user = User(
+            username=username,
+            email=email,
+            city_lat=city_data["lat"],
+            city_lng=city_data["lon"]
+        )
         new_user.set_password(password)
-        
+
         try:
             db.session.add(new_user)
             db.session.commit()
@@ -57,13 +80,12 @@ def register():
             db.session.rollback()
             return f"Ошибка при регистрации: {str(e)}", 500
 
-        
         login_user(new_user)
         session['username'] = username
         session['is_admin'] = False
         return redirect('/')
-    
-    return render_template('register.html')
+
+    return render_template('register.html', cities=popular_cities_kz)
 
 def register_admin():
     if request.method == 'POST':

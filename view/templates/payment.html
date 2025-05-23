@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Способ оплаты — DroneGo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='us_main.css')}}"/>
+  <style>
+    /* ========== CONTAINER ========== */
+    .controls {
+      max-width: 480px;
+      margin: 2rem auto;
+      background: #1e1e1e;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      font-family: 'Poppins', sans-serif;
+      color: #ececec;
+    }
+    .controls h3 {
+      margin-bottom: 1.5rem;
+      color: #e63946;
+      font-size: 1.5rem;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ========== SAVED CARDS ========== */
+    .saved-cards {
+      margin-bottom: 1.5rem;
+    }
+    .card-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #2a2a2a;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.75rem;
+      transition: background .2s;
+    }
+    .card-item:hover {
+      background: #333;
+    }
+    .card-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .card-icon {
+      width: 40px;
+      height: auto;
+      filter: brightness(0) invert(1);
+    }
+    .card-details {
+      font-size: 0.95rem;
+    }
+    .card-details span {
+      display: block;
+      color: #ccc;
+    }
+    .card-select {
+      flex-shrink: 0;
+    }
+    .card-select input {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ========== ADD NEW CARD FORM ========== */
+    .controls form label {
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .controls form input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      background: #121212;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #ececec;
+      font-size: 1rem;
+    }
+    .controls form input:focus {
+      outline: none;
+      border-color: #e63946;
+    }
+    .controls form .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .controls form button {
+      flex: 1;
+      padding: 0.75rem;
+      background: #e63946;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .controls form button:hover {
+      background: #d62828;
+    }
+    .controls form button:active {
+      transform: scale(.97);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="dg-sidebar">
+    <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
+    <ul class="dg-sidebar-list">
+      <li><a href="/">Главная</a></li>
+      <li><a href="{{ url_for('user.profile')}}">Профиль</a></li>
+      <li><a href="#">Работа пилотом</a></li>
+      <li><a href="#">Служба поддержки</a></li>
+    </ul>
+  </aside>
+  <div class="dg-overlay"></div>
+
+  <!-- HEADER -->
+  <header class="dg-header">
+    <button class="dg-btn-menu" aria-label="Меню">☰</button>
+    <div class="dg-current-address">
+      <span>Ваш адрес:</span>
+      <strong>Чайковского 21, подъезд 2</strong>
+    </div>
+    <button class="dg-btn-profile" aria-label="Профиль">👤</button>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dg-main">
+    <section class="controls">
+      <h3>Способ оплаты</h3>
+
+      <!-- Сохраненные карты -->
+      <div class="saved-cards">
+        <div class="card-item">
+          <div class="card-info">
+            <img src="data:image/png;base64,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" alt="Visa" class="card-icon"/>
+            <div class="card-details">
+              <strong>•••• 1234</strong>
+              <span>Действует до 12/24</span>
+            </div>
+          </div>
+          <label class="card-select">
+            <input type="radio" name="selected-card" checked>
+          </label>
+        </div>
+        <div class="card-item">
+          <div class="card-info">
+            <img src="data:image/png;base64,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" alt="Mastercard" class="card-icon"/>
+            <div class="card-details">
+              <strong>•••• 5678</strong>
+              <span>Действует до 08/23</span>
+            </div>
+          </div>
+          <label class="card-select">
+            <input type="radio" name="selected-card">
+          </label>
+        </div>
+      </div>
+
+      <!-- Форма добавления новой карты -->
+      <form id="paymentForm">
+        <label for="card-number">
+          Номер карты<br/>
+          <input type="text" id="card-number" name="card-number"
+                 placeholder="0000 0000 0000 0000" required>
+        </label>
+        <label for="expiry">
+          Срок действия (MM/YY)<br/>
+          <input type="text" id="expiry" name="expiry"
+                 placeholder="MM/YY" required>
+        </label>
+        <label for="cvv">
+          CVV/CVC<br/>
+          <input type="text" id="cvv" name="cvv"
+                 placeholder="123" required>
+        </label>
+        <label for="card-holder">
+          Держатель карты<br/>
+          <input type="text" id="card-holder" name="card-holder"
+                 placeholder="Иванов Иван" required>
+        </label>
+        <div class="btn-row">
+          <button type="submit">Добавить карту</button>
+          <button type="button" onclick="location.href='index.html'">
+            Отмена
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="dg-footer">
+    &copy; 2025 Drone Hackathon by
+    <span style="color: #e63946;"><b>ITshechka</b></span>
+  </footer>
+
+  <script src="{{ url_for('static', filename='us_main.js')}}"></script>
+</body>
+</html>

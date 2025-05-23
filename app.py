@@ -3,7 +3,7 @@ import os
 from flask_login import LoginManager, current_user
 
 from db_models import db, User, Admin, Drone, Order
-from routes import auth_bp
+from routes import auth_bp, admin_bp, user_bp
 
 # Инициализация приложения
 app = Flask(
@@ -32,8 +32,10 @@ def load_user(user_id):
 def index():
     if not current_user.is_authenticated:
         return redirect('/auth/register')
-    # здесь позже можно разграничивать admin/user
-    return render_template('main.html')
+    if current_user.is_admin:
+        return redirect('/admin/dashboard')
+    else:
+        return redirect('/user/dashboard')
 
 # Страница миссий
 @app.route('/missions', endpoint='missions')
@@ -65,6 +67,8 @@ def pilots():
 
 # Роуты аутентификации (login, register, logout)
 app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(admin_bp, url_prefix='/admin')
+app.register_blueprint(user_bp, url_prefix='/user')
 
 if __name__ == '__main__':
     with app.app_context():
