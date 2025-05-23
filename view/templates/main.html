@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Drone Control Dashboard</title>
-  <link rel="stylesheet" href="../static/main.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body>
@@ -12,11 +12,19 @@
         <nav>
           <div class="logo">DroneControl</div>
           <ul class="nav-links">
-            <li><a href="main.html" class="active">Мониторинг</a></li>
-            <li><a href="missions.html">Миссии</a></li>
-            <li><a href="logs.html">Логи</a></li>
-            <li><a href="drones.html">Дроны</a></li>
-            <li><a href="pilots.html">Пилоты</a></li>
+            <li><a href="/" class="active">Мониторинг</a></li>
+            <li><a href="#">Миссии</a></li>
+            <li><a href="#">Логи</a></li>
+            <li><a href="#">Дроны</a></li>
+            <li><a href="#">Пилоты</a></li>
+            {% if current_user.is_authenticated %}
+              <li><a href="{{ url_for('auth.logout') }}">Выход</a></li>
+            {% else %}
+              <li><a href="{{ url_for('auth.login') }}">Вход</a></li>
+              <li><a href="{{ url_for('auth.register') }}">Регистрация</a></li>
+            {% endif %}
+            {{ session['is_admin'] }}
+            {{ session['username'] }}
           </ul>
         </nav>
       </header>
@@ -74,6 +82,6 @@
   <!-- Socket.IO клиент -->
   <script src="https://cdn.socket.io/4.7.0/socket.io.min.js"></script>
   <!-- Основной скрипт -->
-  <script src="../JS/main.js"></script>
+  <script src="{{ url_for('static', filename='main.js')}}"></script>
 </body>
 </html>

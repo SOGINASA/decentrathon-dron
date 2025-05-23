@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Вход — DroneControl</title>
-  <link rel="stylesheet" href="../../static/main.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}"/>
 </head>
 <body class="auth-page">
   <header>
@@ -23,16 +24,16 @@
   <main>
     <section class="controls">
       <h3>Вход в систему</h3>
-      <form id="loginForm">
-        <label for="login-username">Логин или e-mail<br/>
-          <input id="login-username" type="text" name="username" placeholder="ivanov@example.com" required>
+      <form id="loginForm" method="post" action="{{ url_for('auth.login') }}">
+        <label for="login-username">Логин<br/>
+          <input id="login-username" type="text" name="username" placeholder="user_login" required>
         </label>
         <label for="login-password">Пароль<br/>
           <input id="login-password" type="password" name="password" placeholder="••••••••" required>
         </label>
         <button class="toggle-btn" type="submit">Войти</button>
         <p style="margin-top:1rem; text-align:center;">
-          Нет аккаунта? <a href="register.html" style="color:#e63946;">Зарегистрироваться</a>
+          Нет аккаунта? <a href="{{ url_for('auth.register') }}" style="color:#e63946;">Зарегистрироваться</a>
         </p>
       </form>
     </section>
@@ -40,6 +41,6 @@
 
   <footer>&copy; 2025 Drone Hackathon</footer>
 
-  <script src="../JS/auth.js"></script>
+  <!-- <script src="../JS/auth.js"></script> я не знаю, нет там такого файла -->
 </body>
 </html>

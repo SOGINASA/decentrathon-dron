@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Регистрация — DroneControl</title>
-  <link rel="stylesheet" href="../../static/main.css"/>
+  <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}"/>
 </head>
 <body class="auth-page">
   <header>
@@ -23,7 +23,7 @@
   <main>
     <section class="controls">
       <h3>Регистрация нового пользователя</h3>
-      <form id="registerForm">
+      <form id="registerForm" method="post" action="{{ url_for('auth.register') }}">
         <label for="reg-name">Полное имя<br/>
           <input id="reg-name" type="text" name="name" placeholder="Иванов Иван Иванович" required>
         </label>
@@ -38,7 +38,7 @@
         </label>
         <button class="toggle-btn" type="submit">Зарегистрироваться</button>
         <p style="margin-top:1rem; text-align:center;">
-          Уже есть аккаунт? <a href="login.html" style="color:#e63946;">Войти</a>
+          Уже есть аккаунт? <a href="{{ url_for('auth.login') }}" style="color:#e63946;">Войти</a>
         </p>
       </form>
     </section>
@@ -46,6 +46,6 @@
 
   <footer>&copy; 2025 Drone Hackathon</footer>
 
-  <script src="../JS/auth.js"></script>
+  <!-- <script src="../JS/auth.js"></script> --> <!-- я не знаю, нет тут такого файла -->
 </body>
 </html>
