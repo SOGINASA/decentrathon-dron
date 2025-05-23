@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Вход — DroneControl</title>
+  <link rel="stylesheet" href="../../static/main.css"/>
+</head>
+<body class="auth-page">
+  <header>
+    <nav>
+      <div class="logo">DroneControl</div>
+      <!-- <ul class="nav-links">
+        <li><a href="main.html">Мониторинг</a></li>
+        <li><a href="missions.html">Миссии</a></li>
+        <li><a href="logs.html">Логи</a></li>
+        <li><a href="drones.html">Дроны</a></li>
+        <li><a href="pilots.html">Пилоты</a></li>
+      </ul> -->
+    </nav>
+  </header>
+
+  <main>
+    <section class="controls">
+      <h3>Вход в систему</h3>
+      <form id="loginForm">
+        <label for="login-username">Логин или e-mail<br/>
+          <input id="login-username" type="text" name="username" placeholder="ivanov@example.com" required>
+        </label>
+        <label for="login-password">Пароль<br/>
+          <input id="login-password" type="password" name="password" placeholder="••••••••" required>
+        </label>
+        <button class="toggle-btn" type="submit">Войти</button>
+        <p style="margin-top:1rem; text-align:center;">
+          Нет аккаунта? <a href="register.html" style="color:#e63946;">Зарегистрироваться</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Drone Hackathon</footer>
+
+  <script src="../JS/auth.js"></script>
+</body>
+</html>
