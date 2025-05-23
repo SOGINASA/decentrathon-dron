@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Трекинг заказа — DroneGo</title>
+  <link rel="stylesheet" href="us_main.css"/>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+  <style>
+    /* Контейнер для карты */
+    #map {
+      position: absolute;
+      top: 60px;    /* высота header */
+      bottom: 60px; /* высота footer */
+      left: 0;
+      right: 0;
+    }
+    /* Панель справа */
+    .track-panel {
+      position: absolute;
+      top: 60px;
+      right: 16px;
+      width: 280px;
+      background: rgba(30,30,30,0.85);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      color: #ececec;
+      font-family: 'Poppins', sans-serif;
+    }
+    .track-panel h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #e63946;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    /* Шаги заказа */
+    .order-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .step::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .step.completed {
+      background: #2a9d8f;
+    }
+    .step.completed::before {
+      background: #2a9d8f;
+    }
+    .step.active {
+      background: #e63946;
+    }
+    .step.active::before {
+      background: #e63946;
+    }
+    .step.upcoming {
+      background: #444;
+    }
+    .step.upcoming::before {
+      background: #444;
+    }
+
+    /* Информация о дроне */
+    .drone-info {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .drone-info h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: #e63946;
+      text-align: center;
+    }
+    .drone-info dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      row-gap: 0.5rem;
+      column-gap: 0.5rem;
+    }
+    .drone-info dt {
+      color: #ccc;
+    }
+    .drone-info dd {
+      margin: 0;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    /* Подстроить контент под footer/header */
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    main.dg-main {
+      position: relative;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+<aside class="dg-sidebar">
+    <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
+    <ul class="dg-sidebar-list">
+      <li><a href="us_main.html">Главная</a></li>
+      <li><a href="profile.html">Профиль</a></li>
+      <li><a href="payment.html">Способ оплаты</a></li>
+      <li><a href="pilot.html">Работа пилотом</a></li>
+      <li><a href="support.html">Служба поддержки</a></li>
+    </ul>
+  </aside>
+  <div class="dg-overlay"></div>
+  <!-- HEADER -->
+  <header class="dg-header">
+    <button class="dg-btn-menu" aria-label="Меню">☰</button>
+    <div class="dg-current-address">
+      <span>Ваш адрес:</span>
+      <strong>Чайковского 21, подъезд 2</strong>
+    </div>
+    <button class="dg-btn-profile" aria-label="Профиль"
+        onclick="location.href='profile.html'">
+  <img src="6522516.png" alt="Профиль" class="dg-profile-icon"/>
+</button>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dg-main">
+    <div id="map"></div>
+
+    <aside class="track-panel">
+      <h2>Статус заказа #1002</h2>
+      <div class="order-steps">
+        <div class="step completed">В обработке</div>
+        <div class="step active">У курьера</div>
+        <div class="step upcoming">Доставляется</div>
+        <div class="step upcoming">Выполнен</div>
+      </div>
+      <div class="drone-info">
+        <h3>Позиция дрона</h3>
+        <dl>
+          <dt>Координаты:</dt><dd id="drone-coords">—</dd>
+          <dt>Высота:</dt><dd id="drone-alt">— м</dd>
+          <dt>Скорость:</dt><dd id="drone-speed">— м/с</dd>
+          <dt>Заряд:</dt><dd id="drone-batt">— %</dd>
+        </dl>
+      </div>
+    </aside>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="dg-footer">
+    &copy; 2025 Drone Hackathon by 
+    <span style="color: #e63946;"><b>ITshechka</b></span>
+  </footer>
+
+  <!-- Leaflet & Socket.IO -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.socket.io/4.7.0/socket.io.min.js"></script>
+  <script src="tracking.js"></script>
+</body>
+</html>
