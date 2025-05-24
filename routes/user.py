@@ -8,15 +8,33 @@ user_bp = Blueprint('user', __name__)
 def create_order():
     if current_user.is_authenticated:
         if request.method == 'POST':
-            start_location = request.form.get('start_location')
-            end_location = request.form.get('end_location')
-            cost = request.form.get('cost')
-            order = Order(start_location=start_location, end_location=end_location, owner_id=current_user.id, status='in_queue', cost=cost)
+            # Получаем адреса — можно сохранить как есть, если нужно, либо убрать
+            start_location = request.form.get('start_location')  # Можно сохранить, если надо
+            end_location = request.form.get('end_location')      # Можно сохранить, если надо
+
+            # Получаем координаты из скрытых полей
+            start_lat = request.form.get('start_lat', type=float)
+            start_lon = request.form.get('start_lon', type=float)
+            end_lat = request.form.get('end_lat', type=float)
+            end_lon = request.form.get('end_lon', type=float)
+
+            cost = request.form.get('cost', type=int)
+
+            # Создаём объект заказа с координатами
+            order = Order(
+                start_lat=start_lat,
+                start_lon=start_lon,
+                end_lat=end_lat,
+                end_lon=end_lon,
+                owner_id=current_user.id,
+                status='in_queue',
+                cost=cost
+            )
             db.session.add(order)
             db.session.commit()
             return redirect('/')
         else:
-            return render_template('order.html')
+            return render_template('order.html', city_lat=current_user.city_lat, city_lng=current_user.city_lng)
     return redirect('/auth/login')
 
 def my_queue():
@@ -36,7 +54,7 @@ def dashboard():
         for i in orders_unfiltred:
             if i.status == 'in_queue' or i.status == 'in_progress':
                 orders.append(i)
-        return render_template('us_main.html', orders=orders[:5])
+        return render_template('us_main.html', orders=orders[:5])   
     return redirect('/auth/login')
 
 def profile():

@@ -53,6 +53,13 @@
     </button>
   </form>
 
+<!-- Координаты центра города (для БД) -->
+<script>
+  const userCityLat = {{ city_lat }};
+  const userCityLng = {{ city_lng }};
+</script>
+
+
   <script src="{{ url_for('static', filename='order.js') }}"></script>
 </body>
 </html>

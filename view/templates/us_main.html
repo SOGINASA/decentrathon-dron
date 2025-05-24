@@ -16,10 +16,10 @@
       <li><a href="#">Работа пилотом</a></li>
       <li><a href="#">Служба поддержки</a></li>
       {% if current_user.is_authenticated %}
-        <li><a href="/logout">Выйти</a></li>
+        <li><a href="/auth/logout">Выйти</a></li>
       {% else %}
-        <li><a href="/login">Войти</a></li>
-        <li><a href="/register">Регистрация</a></li>
+        <li><a href="/auth/login">Войти</a></li>
+        <li><a href="/auth/register">Регистрация</a></li>
       {% endif %}
     </ul>
   </aside>
@@ -28,10 +28,7 @@
   <!-- HEADER -->
   <header class="dg-header">
     <button class="dg-btn-menu" aria-label="Меню">☰</button>
-    <div class="dg-current-address">
-      <span>Ваш адрес:</span>
-      <strong>Чайковского 21, подъезд 2</strong>
-    </div>
+
     <button class="dg-btn-profile" aria-label="Профиль"
         onclick="location.href='/user/profile'">
   <img src="{{ url_for('static', filename='6522516.png')}}" alt="Профиль" class="dg-profile-icon"/>
@@ -78,18 +75,13 @@
     <section class="dg-recent">
       <h2 class="dg-section-title">Недавние адреса</h2>
       <ul class="dg-recent-list">
+        {% for order in orders %}
         <li class="dg-recent-item"
-            data-time="7 мин">
-          Нурсултана Назарбаева 234
+            data-time="{{ order.date }}">
+          {{ order.status }}
         </li>
-        <li class="dg-recent-item"
-            data-time="13 мин">
-          Жалела Кизатова 1
-        </li>
-        <li class="dg-recent-item"
-            data-time="12 мин">
-          Школа-гимназия, ул. Тауелсиздик, 327Г
-        </li>
+        {% endfor %}
+
       </ul>
     </section>
 

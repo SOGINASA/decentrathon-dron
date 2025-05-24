@@ -46,8 +46,10 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    start_location = db.Column(db.String(100), nullable=False)
-    end_location = db.Column(db.String(100), nullable=False)
+    start_lat = db.Column(db.Float, nullable=False)
+    start_lon = db.Column(db.Float, nullable=False)
+    end_lat = db.Column(db.Float, nullable=False)
+    end_lon = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(100), nullable=False) # 'in_progress', 'completed', 'in_queue'
     cost = db.Column(db.Integer, nullable=False)
 

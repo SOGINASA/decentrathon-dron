@@ -15,7 +15,7 @@ ymaps.ready(init);
 
 function init() {
   map = new ymaps.Map('map', {
-    center: [54.8796, 69.1754],
+    center: [userCityLat, userCityLng],
     zoom: 12,
     controls: []
   });
@@ -36,25 +36,21 @@ function init() {
           .addEventListener('change', onAddressChange);
 }
 
+
 // Обработка клика на карте
 function onMapClick(e) {
   if (!picking) return;
 
   const coords = e.get('coords');
   ymaps.geocode(coords, {
-    boundedBy: cityBounds,
-    strictBounds: true,
     results: 1
   }).then(res => {
-    if (!res.geoObjects.getLength()) {
-      alert('Метка за пределами Петропавловска');
-      picking = null;
-      return;
-    }
+    if (!res.geoObjects.getLength()) return;
     const first = res.geoObjects.get(0);
     applyGeocodeResult(picking, coords, first.getAddressLine());
   });
 }
+
 
 // Обработка ручного ввода адреса
 function onAddressChange(e) {
@@ -63,35 +59,37 @@ function onAddressChange(e) {
   if (!value) return;
 
   ymaps.geocode(value, {
-    boundedBy: cityBounds,
-    strictBounds: true,
-    results: 1
-  }).then(res => {
-    if (!res.geoObjects.getLength()) {
-      alert('Адрес не найден в Петропавловске');
-      return;
-    }
-    const geo = res.geoObjects.get(0);
-    const coords = geo.geometry.getCoordinates();
-    const type = id === 'start-address' ? 'start' : 'end';
-    applyGeocodeResult(type, coords, geo.getAddressLine());
-  });
+  results: 1
+}).then(res => {
+  if (!res.geoObjects.getLength()) return;
+  const geo = res.geoObjects.get(0);
+  const coords = geo.geometry.getCoordinates();
+  const type = id === 'start-address' ? 'start' : 'end';
+  applyGeocodeResult(type, coords, geo.getAddressLine());
+});
+
 }
 
 // Общий код применения результатов геокодинга
 function applyGeocodeResult(type, coords, address) {
   if (type === 'start') {
     startCoords = coords;
-    document.getElementById('start-address').value = address;
+    document.getElementById('start-address').value = address; // пользователь видит адрес
+    document.getElementById('start-lat').value = coords[0];   // скрытое поле для lat
+    document.getElementById('start-lon').value = coords[1];   // скрытое поле для lon
     setPlacemark('start', coords);
   } else {
     endCoords = coords;
-    document.getElementById('end-address').value = address;
+    document.getElementById('end-address').value = address;   // пользователь видит адрес
+    document.getElementById('end-lat').value = coords[0];     // скрытое поле для lat
+    document.getElementById('end-lon').value = coords[1];     // скрытое поле для lon
     setPlacemark('end', coords);
   }
+
   picking = null;
   tryBuildRoute();
 }
+
 
 // Установка метки на карте
 function setPlacemark(type, coords) {
@@ -132,4 +130,6 @@ function updatePrice(lengthMeters) {
   const price = Math.ceil(km * 100); // например, 100₸ за км
   document.getElementById('price').textContent = price + '₸';
   document.getElementById('order-btn').disabled = false;
+  document.getElementById('cost').value = price;  // где price — число стоимости
+
 }
