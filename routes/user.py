@@ -44,11 +44,18 @@ def create_order():
 def my_queue():
     if current_user.is_authenticated:
         orders_unfiltred = Order.query.filter_by(owner_id=current_user.id).all()
-        orders = []
+        in_queue = []
+        in_progress = []
+        completed = []
         for i in orders_unfiltred:
-            if i.status == 'in_queue' or i.status == 'in_progress':
-                orders.append(i)
-        return render_template('queue.html', orders=orders)
+            if i.status == 'in_queue':
+                in_queue.append(i)
+            elif i.status == 'in_progress':
+                in_progress.append(i)
+            elif i.status == 'completed':
+                completed.append(i)
+
+        return render_template('my_zakazi.html', in_queue=in_queue, in_progress=in_progress, completed=completed)
     return redirect('/auth/login')
 
 def dashboard():
