@@ -25,13 +25,13 @@
           </a>
         </li>
         <li>
-          <a href="{{ url_for('logs') }}"
+          <a href="{{ url_for('admin.logs') }}"
              class="{% if request.endpoint=='logs' %}active{% endif %}">
             Логи
           </a>
         </li>
         <li>
-          <a href="{{ url_for('drones') }}"
+          <a href="{{ url_for('admin.drones') }}"
              class="{% if request.endpoint=='drones' %}active{% endif %}">
             Дроны
           </a>

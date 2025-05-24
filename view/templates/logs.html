@@ -18,19 +18,19 @@
               </a>
             </li>
             <li>
-              <a href="{{ url_for('missions') }}"
+              <a href="{{ url_for('admin.missions') }}"
                  class="{% if request.endpoint == 'missions' %}active{% endif %}">
                 Миссии
               </a>
             </li>
             <li>
-              <a href="{{ url_for('logs') }}"
+              <a href="{{ url_for('admin.logs') }}"
                  class="{% if request.endpoint == 'logs' %}active{% endif %}">
                 Логи
               </a>
             </li>
             <li>
-              <a href="{{ url_for('drones') }}"
+              <a href="{{ url_for('admin.drones') }}"
                  class="{% if request.endpoint == 'drones' %}active{% endif %}">
                 Дроны
               </a>
@@ -54,7 +54,11 @@
   <main>
     <section class="logs-container">
       <h2>Реальные логи дрона</h2>
-      <div id="logList" class="log-list"></div>
+      <div id="logList" class="log-list">
+        {% for log in logs %}
+        <div class="log-entry">[{{log.date}}]{{ log.message }}</div>
+        {% endfor %}
+      </div>
     </section>
   </main>
 
@@ -63,6 +67,6 @@
   <!-- Socket.IO client -->
   <script src="https://cdn.socket.io/4.7.0/socket.io.min.js"></script>
   <!-- Наш скрипт логов -->
-  <script src="{{ url_for('static', filename='logs.js') }}"></script>
+  <!-- <script src="{{ url_for('static', filename='logs.js') }}"></script> -->
 </body>
 </html>

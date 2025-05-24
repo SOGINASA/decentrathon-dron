@@ -18,19 +18,19 @@
           </a>
         </li>
         <li>
-          <a href="{{ url_for('missions') }}"
+          <a href="{{ url_for('admin.missions') }}"
              class="{% if request.endpoint == 'missions' %}active{% endif %}">
             Миссии
           </a>
         </li>
         <li>
-          <a href="{{ url_for('logs') }}"
+          <a href="{{ url_for('admin.logs') }}"
              class="{% if request.endpoint == 'logs' %}active{% endif %}">
             Логи
           </a>
         </li>
         <li>
-          <a href="{{ url_for('drones') }}"
+          <a href="{{ url_for('admin.drones') }}"
              class="{% if request.endpoint == 'drones' %}active{% endif %}">
             Дроны
           </a>
@@ -55,9 +55,9 @@
     <!-- Форма добавления -->
     <section class="controls">
       <h3>Добавить дрон</h3>
-      <form id="droneForm">
+      <form id="droneForm" method="post" action="{{ url_for('admin.drones') }}">
         <label>Марка<br/>
-          <input type="text" name="brand" placeholder="Напр. DJI" required>
+          <input type="text" name="mark" placeholder="Напр. DJI" required>
         </label><br/><br/>
         <label>Модель<br/>
           <input type="text" name="model" placeholder="Напр. Phantom 4" required>
@@ -72,13 +72,14 @@
     <!-- Список дронов -->
     <section class="missions-list">
       <h2>Список дронов</h2>
-
-      <div class="mission-card">
-        <h3>Дрон #1</h3>
-        <p>Марка: DJI</p>
-        <p>Модель: Phantom 4</p>
-        <p>Серийный номер: SN12345</p>
-      </div>
+        {% for drone in drones %}
+        <div class="mission-card">
+          <h3>Дрон {{ loop.index }}</h3>
+          <p>Марка: {{ drone.mark }}</p>
+          <p>Модель: {{ drone.model }}</p>
+          <p>Серийный номер: {{ drone.serial }}</p>
+        </div>
+        {% endfor %}
 
       <!-- в дальнейшем эти карточки будут генерироваться из JS -->
     </section>

@@ -32,31 +32,17 @@ def load_user(user_id):
 def index():
     if not current_user.is_authenticated:
         return redirect('/auth/register')
-    if current_user.is_admin:
+    if session.get('is_admin'):
         return redirect('/admin/dashboard')
     else:
         return redirect('/user/dashboard')
 
-# Страница миссий
-@app.route('/missions', endpoint='missions')
-def missions():
-    if not current_user.is_authenticated:
-        return redirect('/auth/login')
-    return render_template('missions.html')
-
-# Страница логов
-@app.route('/logs', endpoint='logs')
-def logs():
-    if not current_user.is_authenticated:
-        return redirect('/auth/login')
-    return render_template('logs.html')
-
-# Страница дронов
-@app.route('/drones', endpoint='drones')
-def drones():
-    if not current_user.is_authenticated:
-        return redirect('/auth/login')
-    return render_template('drones.html')
+# # Страница миссий
+# @app.route('/missions', endpoint='missions')
+# def missions():
+#     if not current_user.is_authenticated:
+#         return redirect('/auth/login')
+#     return render_template('missions.html')
 
 # Страница пилотов
 @app.route('/pilots', endpoint='pilots')
@@ -65,7 +51,7 @@ def pilots():
         return redirect('/auth/login')
     return render_template('pilots.html')
 
-# Роуты аутентификации (login, register, logout)
+
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(user_bp, url_prefix='/user')

@@ -36,9 +36,11 @@ class Admin(UserMixin, db.Model):
 
 class Drone(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    mark = db.Column(db.String(100), primary_key=True, nullable=False)
+    mark = db.Column(db.String(100), nullable=False)
     model = db.Column(db.String(100), nullable=False)
-    coordinates = db.Column(db.String(100), nullable=False)
+    serial = db.Column(db.String(100), nullable=False)
+    lat = db.Column(db.Float, nullable=False)
+    lng = db.Column(db.Float, nullable=False)
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,6 +50,11 @@ class Order(db.Model):
     end_location = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(100), nullable=False) # 'in_progress', 'completed', 'in_queue'
     cost = db.Column(db.Integer, nullable=False)
+
+class Log(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+    message = db.Column(db.String(100), nullable=False)
 
 if __name__ == '__main__':
     db.create_all()
