@@ -34,5 +34,14 @@ def complete_order(order_id):
     order.status = 'completed'
     db.session.commit()
 
+def add_log():
+    message = request.args.get('message')
+    log = Log(message=message)
+    db.session.add(log)
+    db.session.commit()
+
 api_bp.add_url_rule('/active_orders', view_func=order_path, methods=['GET'])
 api_bp.add_url_rule('/queue', view_func=queue_api, methods=['GET'])
+api_bp.add_url_rule('/set_active_orders/<int:order_id>', view_func=set_active_orders, methods=['POST'])
+api_bp.add_url_rule('/complete_order/<int:order_id>', view_func=complete_order, methods=['POST'])
+api_bp.add_url_rule('/add_log', view_func=add_log, methods=['POST'])
