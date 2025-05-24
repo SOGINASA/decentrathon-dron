@@ -81,7 +81,11 @@ def profile():
         return render_template('profile.html')
     return redirect('/auth/login')
 
+def support():
+    return render_template('support.html')
+
 user_bp.add_url_rule('/create_order', view_func=create_order, methods=['GET', 'POST'])
 user_bp.add_url_rule('/queue', view_func=my_queue, methods=['GET'])
 user_bp.add_url_rule('/dashboard', view_func=dashboard, methods=['GET'])
 user_bp.add_url_rule('/profile', view_func=profile, methods=['GET', 'POST'])
+user_bp.add_url_rule('/support', view_func=support, methods=['GET'])

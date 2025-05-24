@@ -14,7 +14,7 @@
       <li><a href="/user/profile">Профиль</a></li>
       <li><a href="#">Способ оплаты</a></li>
       <li><a href="#">Работа пилотом</a></li>
-      <li><a href="#">Служба поддержки</a></li>
+      <li><a href="{{ url_for('user.support')}}">Служба поддержки</a></li>
       {% if current_user.is_authenticated %}
         <li><a href="/auth/logout">Выйти</a></li>
       {% else %}
