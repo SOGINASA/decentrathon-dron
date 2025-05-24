@@ -18,12 +18,6 @@
           </a>
         </li>
         <li>
-          <a href="{{ url_for('admin.missions') }}"
-             class="{% if request.endpoint == 'missions' %}active{% endif %}">
-            Миссии
-          </a>
-        </li>
-        <li>
           <a href="{{ url_for('admin.logs') }}"
              class="{% if request.endpoint == 'logs' %}active{% endif %}">
             Логи
@@ -33,12 +27,6 @@
           <a href="{{ url_for('admin.drones') }}"
              class="{% if request.endpoint == 'drones' %}active{% endif %}">
             Дроны
-          </a>
-        </li>
-        <li>
-          <a href="{{ url_for('pilots') }}"
-             class="{% if request.endpoint == 'pilots' %}active{% endif %}">
-            Пилоты
           </a>
         </li>
         {% if current_user.is_authenticated %}

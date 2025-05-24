@@ -19,12 +19,6 @@
           </a>
         </li>
         <li>
-          <a href="{{ url_for('admin.missions') }}"
-             class="{% if request.endpoint == 'missions' %}active{% endif %}">
-            Миссии
-          </a>
-        </li>
-        <li>
           <a href="{{ url_for('admin.logs') }}"
              class="{% if request.endpoint == 'logs' %}active{% endif %}">
             Логи
@@ -34,12 +28,6 @@
           <a href="{{ url_for('admin.drones') }}"
              class="{% if request.endpoint == 'drones' %}active{% endif %}">
             Дроны
-          </a>
-        </li>
-        <li>
-          <a href="{{ url_for('pilots') }}"
-             class="{% if request.endpoint == 'pilots' %}active{% endif %}">
-            Пилоты
           </a>
         </li>
         {% if current_user.is_authenticated %}
@@ -69,10 +57,8 @@
       <div class="telemetry">
         <h3>Телеметрия</h3>
         <ul>
-          <li>Высота: <span id="altitude">—</span> м</li>
           <li>Скорость: <span id="speed">—</span> м/с</li>
           <li>Заряд: <span id="battery">—</span>%</li>
-          <li>Координаты: <span id="coords">—</span></li>
         </ul>
       </div>
 

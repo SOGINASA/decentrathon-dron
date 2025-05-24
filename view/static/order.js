@@ -126,10 +126,17 @@ function tryBuildRoute() {
 
 // Расчёт и отображение цены
 function updatePrice(lengthMeters) {
-  const km    = lengthMeters / 1000;
+  const timeInMinutes = parseInt(lengthMeters / 60)
+  const km = lengthMeters / 1000;
   const price = Math.ceil(km * 100); // например, 100₸ за км
   document.getElementById('price').textContent = price + '₸';
   document.getElementById('order-btn').disabled = false;
   document.getElementById('cost').value = price;  // где price — число стоимости
-
+  document.getElementById('time').value = timeInMinutes;
+  console.log("время: ",timeInMinutes);
+  console.log("км: ",km);
+  console.log("м: ",lengthMeters);
+  console.log("скорость(м/с): ",speed);
+  console.log("скорость(км/ч): ",spped_kmh);
+  console.log("стоимость: ",price);
 }

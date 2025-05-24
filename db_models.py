@@ -52,6 +52,9 @@ class Order(db.Model):
     end_lon = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(100), nullable=False) # 'in_progress', 'completed', 'in_queue'
     cost = db.Column(db.Integer, nullable=False)
+    time = db.Column(db.Integer, nullable=False)
+    start_location = db.Column(db.String(100), nullable=False)
+    end_location = db.Column(db.String(100), nullable=False)
 
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)

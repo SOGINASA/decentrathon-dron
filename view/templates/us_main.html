@@ -77,8 +77,8 @@
       <ul class="dg-recent-list">
         {% for order in orders %}
         <li class="dg-recent-item"
-            data-time="{{ order.date }}">
-          {{ order.status }}
+            data-time="{{ order.time }} минут">
+          {{ order.start_location }} → {{ order.end_location }}
         </li>
         {% endfor %}
 

@@ -17,6 +17,7 @@ def create_order():
             start_lon = request.form.get('start_lon', type=float)
             end_lat = request.form.get('end_lat', type=float)
             end_lon = request.form.get('end_lon', type=float)
+            time = request.form.get('time')
 
             cost = request.form.get('cost', type=int)
 
@@ -28,7 +29,10 @@ def create_order():
                 end_lon=end_lon,
                 owner_id=current_user.id,
                 status='in_queue',
-                cost=cost
+                cost=cost,
+                time=time,
+                start_location=start_location,
+                end_location=end_location
             )
             db.session.add(order)
             db.session.commit()
