@@ -136,7 +136,12 @@ def start_order(order_id):
     if not order_id:
         return jsonify({'error': 'Missing order_id or owner_id'}), 400
 
+
+    if not order_id:
+        return jsonify({'error': 'Missing order_id or owner_id'}), 400
+
     try:
+        order = Order.query.filter_by(id=order_id).first_or_404()
         order = Order.query.filter_by(id=order_id).first_or_404()
         order.status = 'in_progress'
         db.session.commit()
