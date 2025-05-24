@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session, url_for, Blueprint
+from flask import Flask, flash, redirect, render_template, request, session, url_for, Blueprint, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from db_models import Admin, db, User, Order
@@ -95,8 +95,40 @@ def profile():
 def support():
     return render_template('support.html')
 
+def get_all_orders():
+    orders = Order.query.all()
+    orders_list = []
+    for order in orders:
+        orders_list.append({
+            'id': order.id,
+            'start_lat': order.start_lat,
+            'start_lon': order.start_lon,
+            'end_lat': order.end_lat,
+            'end_lon': order.end_lon,
+            'owner_id': order.owner_id,
+            'status': order.status,
+            'cost': order.cost,
+            'time': order.time,
+            'start_location': order.start_location,
+            'end_location': order.end_location
+        })
+    return jsonify(orders_list)
+
+
+def start_order(order_id):
+    try:
+        order = Order.query.filter_by(id=order_id, owner_id=current_user.id).first_or_404()
+        order.status = 'in_progress'
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': 'Order started successfully'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 user_bp.add_url_rule('/create_order', view_func=create_order, methods=['GET', 'POST'])
 user_bp.add_url_rule('/queue', view_func=my_queue, methods=['GET'])
 user_bp.add_url_rule('/dashboard', view_func=dashboard, methods=['GET'])
 user_bp.add_url_rule('/profile', view_func=profile, methods=['GET', 'POST'])
 user_bp.add_url_rule('/support', view_func=support, methods=['GET'])
+user_bp.add_url_rule('/orders', view_func=get_all_orders, methods=['GET'])
+user_bp.add_url_rule('/orders/<int:order_id>/start', view_func=start_order, methods=['POST'])

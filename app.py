@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, session
 import os
 from flask_login import LoginManager, current_user
+from flask_cors import CORS
 
 from db_models import db, User, Admin, Drone, Order
 from routes import auth_bp, admin_bp, user_bp
@@ -11,6 +12,7 @@ app = Flask(
     template_folder='view/templates',
     static_folder='view/static'
 )
+CORS(app)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chat_history.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
