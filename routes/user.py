@@ -108,9 +108,30 @@ def get_all_orders():
     return jsonify(orders_list)
 
 
+from flask import request
+from functools import wraps
+
+
+
+API_TOKEN = "your-secret-api-token"
+
+def require_api_token(func):
+    @wraps(func)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token or token != f"Bearer {API_TOKEN}":
+            return jsonify({'error': 'Unauthorized'}), 401
+        return func(*args, **kwargs)
+    return decorated
+
+@require_api_token
 def start_order(order_id):
+
+    if not order_id:
+        return jsonify({'error': 'Missing order_id or owner_id'}), 400
+
     try:
-        order = Order.query.filter_by(id=order_id, owner_id=current_user.id).first_or_404()
+        order = Order.query.filter_by(id=order_id).first_or_404()
         order.status = 'in_progress'
         db.session.commit()
         return jsonify({'status': 'success', 'message': 'Order started successfully'})
