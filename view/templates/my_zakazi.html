@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Мои заказы — DroneGo</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='us_main.css')}}" />
 </head>
 <body>
     <!-- SIDEBAR -->
@@ -14,8 +14,8 @@
       <li><a href="/">Главная</a></li>
       <li><a href="{{ url_for('user.profile')}}">Профиль</a></li>
       <li><a href="#">Способ оплаты</a></li>
-      <li><a href="#">Работа пилотом</a></li>
       <li><a href="{{ url_for('user.support')}}">Служба поддержки</a></li>
+      <li><a href="/auth/logout">Выйти</a></li>
     </ul>
   </aside>
   <div class="dg-overlay"></div>
@@ -39,26 +39,19 @@
   
       <!-- В обработке -->
       <div class="order-category">
-        <h3>В обработке</h3>
+        <h3>В очереди</h3>
         <div class="orders-grid">
+          {% for order in in_queue %}
           <div class="order-card">
             <div class="order-header">
-              <h4>Заказ #1001</h4>
+              <h4>Заказ #{{ order.id }}</h4>
               <span class="badge badge-pending">В обработке</span>
             </div>
-            <p><strong>От:</strong> ул. Ленина, 10</p>
-            <p><strong>До:</strong> пр. Независимости, 5</p>
-            <p><strong>Время:</strong> 23 мая, 12:45</p>
+            <p><strong>От:</strong> {{ order.start_location }}</p>
+            <p><strong>До:</strong> {{ order.end_location }}</p>
+            <p><strong>Время:</strong> {{ order.date }}</p>
           </div>
-          <div class="order-card">
-            <div class="order-header">
-              <h4>Заказ #1004</h4>
-              <span class="badge badge-pending">В обработке</span>
-            </div>
-            <p><strong>От:</strong> ул. Гоголя, 15</p>
-            <p><strong>До:</strong> ул. Жамбыла, 42</p>
-            <p><strong>Время:</strong> 23 мая, 14:10</p>
-          </div>
+          {% endfor %}
         </div>
       </div>
   
@@ -66,15 +59,17 @@
       <div class="order-category">
         <h3>У курьера</h3>
         <div class="orders-grid">
+          {% for order in in_progress %}
           <div class="order-card">
             <div class="order-header">
-              <h4>Заказ #1002</h4>
+              <h4>Заказ #{{ order.id }}</h4>
               <span class="badge badge-delivering">У курьера</span>
             </div>
-            <p><strong>От:</strong> ул. Байтурсынова, 7</p>
-            <p><strong>До:</strong> ул. Айтеке би, 30</p>
-            <p><strong>Время:</strong> 23 мая, 11:20</p>
+            <p><strong>От:</strong> {{ order.start_location }}</p>
+            <p><strong>До:</strong> {{ order.end_location }}</p>
+            <p><strong>Время:</strong> {{ order.time }}</p>
           </div>
+          {% endfor %}
         </div>
       </div>
   
@@ -82,24 +77,17 @@
       <div class="order-category">
         <h3>Выполнен</h3>
         <div class="orders-grid">
+          {% for order in completed %}
           <div class="order-card">
             <div class="order-header">
-              <h4>Заказ #1000</h4>
+              <h4>Заказ #{{ order.id }}</h4>
               <span class="badge badge-completed">Выполнен</span>
             </div>
-            <p><strong>От:</strong> ул. Кирова, 22</p>
-            <p><strong>До:</strong> ул. Островского, 18</p>
-            <p><strong>Время:</strong> 22 мая, 16:05</p>
+            <p><strong>От:</strong> {{ order.start_location }}</p>
+            <p><strong>До:</strong> {{ order.end_location }}</p>
+            <p><strong>Время:</strong> {{ order.time }}</p>
           </div>
-          <div class="order-card">
-            <div class="order-header">
-              <h4>Заказ #999</h4>
-              <span class="badge badge-completed">Выполнен</span>
-            </div>
-            <p><strong>От:</strong> пр. Мира, 3</p>
-            <p><strong>До:</strong> ул. Бухтарминская, 11</p>
-            <p><strong>Время:</strong> 22 мая, 14:50</p>
-          </div>
+          {% endfor %}
         </div>
       </div>
   
