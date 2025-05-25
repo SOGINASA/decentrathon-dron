@@ -12,15 +12,9 @@
     <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
     <ul class="dg-sidebar-list">
       <li><a href="/user/profile">Профиль</a></li>
-      <li><a href="#">Способ оплаты</a></li>
-      <li><a href="#">Работа пилотом</a></li>
+      <li><a href="{{ url_for('user.payment')}}">Способ оплаты</a></li>
       <li><a href="{{ url_for('user.support')}}">Служба поддержки</a></li>
-      {% if current_user.is_authenticated %}
-        <li><a href="/auth/logout">Выйти</a></li>
-      {% else %}
-        <li><a href="/auth/login">Войти</a></li>
-        <li><a href="/auth/register">Регистрация</a></li>
-      {% endif %}
+      <li><a href="{{ url_for('auth.logout')}}">Выйти</a></li>
     </ul>
   </aside>
   <div class="dg-overlay"></div>
@@ -54,13 +48,6 @@
              class="dg-service-icon"/>
         <span class="dg-service-label">Мои заказы</span>
       </div>
-      <!-- <div class="dg-service-item"
-           onclick="location.href='tracking.html'">
-        <img src="{{ url_for('static', filename='tracking.png')}}"
-             alt=""
-             class="dg-service-icon"/>
-        <span class="dg-service-label">Трекинг</span>
-      </div> -->
     </section>
 
     <!-- БОЛЬШАЯ КНОПКА ЗАПРОСА МАРШРУТА -->

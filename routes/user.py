@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, Blueprint, jsonify
 from flask_login import current_user
-from db_models import Admin, db, User, Order
+from db_models import Admin, Payment_card, db, User, Order
 from flask import request
 from functools import wraps
 
@@ -148,6 +148,26 @@ def start_order(order_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+def payment():
+    if not current_user.is_authenticated:
+        return redirect('/auth/login')
+    owned_cards = Payment_card.query.filter_by(owner_id=current_user.id).all()
+    if request.method == 'POST':
+        number = request.form.get('card-number')
+        expiry_date = request.form.get('expiry')
+        cvv = request.form.get('cvv')
+        owner_id = current_user.id
+
+        card_exist = Payment_card.query.filter_by(number=number).first()
+
+        if card_exist:
+            return render_template('payment.html', error="Карта с таким номером уже существует", owned_cards=owned_cards)
+
+        new_card = Payment_card(number=number, expiry_date=expiry_date, cvv=cvv, owner_id=owner_id)
+        db.session.add(new_card)
+        db.session.commit()
+    
+    return render_template('payment.html', owned_cards=owned_cards)
 
 user_bp.add_url_rule('/create_order', view_func=create_order, methods=['GET', 'POST'])
 user_bp.add_url_rule('/queue', view_func=my_queue, methods=['GET'])
@@ -156,3 +176,4 @@ user_bp.add_url_rule('/profile', view_func=profile, methods=['GET', 'POST'])
 user_bp.add_url_rule('/support', view_func=support, methods=['GET'])
 user_bp.add_url_rule('/orders', view_func=get_all_orders, methods=['GET'])
 user_bp.add_url_rule('/orders/<int:order_id>/start', view_func=start_order, methods=['POST'])
+user_bp.add_url_rule('/payment', view_func=payment, methods=['GET', 'POST'])

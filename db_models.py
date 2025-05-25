@@ -12,7 +12,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(100), unique=True)
     city_lat = db.Column(db.Float, nullable=False)
-    city_lng = db.Column(db.Float, nullable=False)    
+    city_lng = db.Column(db.Float, nullable=False)
     is_admin = False
     
     def set_password(self, password):
@@ -60,6 +60,13 @@ class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
     message = db.Column(db.String(100), nullable=False)
+
+class Payment_card(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.String(100), nullable=False)
+    cvv = db.Column(db.String(100), nullable=False)
+    expiry_date = db.Column(db.String(10), nullable=False)  # Format: MM/YY
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 if __name__ == '__main__':
     db.create_all()
