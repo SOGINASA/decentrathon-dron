@@ -58,7 +58,7 @@ function animateRoute(points, speed) {
     }
     step();
   }
-
+  
   moveNext();
 }
 
