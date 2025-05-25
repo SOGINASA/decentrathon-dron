@@ -45,7 +45,7 @@ function animateRoute(points, speed) {
       const lat = lerp(sLat, eLat, t),
             lng = lerp(sLng, eLng, t);
       marker.setLatLng([lat, lng]);
-      // map.setView([lat, lng]);
+      map.setView([lat, lng]);
       requestAnimationFrame(step);
     }
     step();
@@ -145,7 +145,7 @@ L.marker(center)
   socket.on('telemetry', data => {
     document.getElementById('speed')   && (document.getElementById('speed').textContent   = data.speed);
     document.getElementById('battery') && (document.getElementById('battery').textContent = data.battery);
-    // map.setView([data.lat, data.lng]);
+    map.setView([data.lat, data.lng]);
   });
 
   // ===== Управление =====

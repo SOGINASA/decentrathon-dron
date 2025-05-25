@@ -48,13 +48,16 @@
 
   <main>
     <!-- Видео-панель -->
+     <h2>видео с дрона #1</h2>
+     <br>
     <section class="video-panel">
+      
       <video
         id="cameraStream"
         autoplay
         muted
         playsinline
-        src="http://<RASPBERRY_IP>:8080/stream.mjpg"
+        src="{{ url_for('static', filename='drones_camera2.mp4') }}"
       ></video>
     </section>
 
@@ -93,10 +96,7 @@
   ></section>
 
   <!-- Карта дрона -->
-  <section
-     id="map"
-     class="map-panel map-fullscreen"
-  ></section>
+  <section id="map" class="map-panel map-fullscreen"></section>
 
   </main>
 
