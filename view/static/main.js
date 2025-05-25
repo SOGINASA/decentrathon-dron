@@ -56,10 +56,10 @@ function animateRoute(points, speed) {
       map.setView([lat, lng]);
       requestAnimationFrame(step);
     }
-    step();
+    // step();
   }
   
-  moveNext();
+  // moveNext();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
