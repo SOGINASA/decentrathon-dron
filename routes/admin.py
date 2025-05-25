@@ -1,7 +1,6 @@
-from flask import Flask, flash, redirect, render_template, request, session, url_for, Blueprint
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from db_models import Admin, db, User, Drone, Log
+from flask import redirect, render_template, request, session, Blueprint
+from flask_login import current_user
+from db_models import db, Drone, Log
 
 
 admin_bp = Blueprint('admin', __name__)
