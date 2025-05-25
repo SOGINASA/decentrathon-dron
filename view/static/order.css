@@ -1,32 +1,48 @@
 /* ===== RESET ===== */
-* { box-sizing: border-box; margin:0; padding:0 }
-html, body { height:100%; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background: #000; /* чтобы не было белых полос при загрузке карты */
+  overflow: hidden; /* отключаем скролл, карта и панель заполняют весь экран */
+}
 
 /* ===== MAP ===== */
+/* Делаем карту на всю область экрана, а панель будет накладываться сверху */
 .order-map {
-  width: 100%;
-  height: calc(100vh - 200px); /* оставляем место под панель */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
 }
 
 /* ===== PANEL ===== */
 .order-panel {
   position: fixed;
-  bottom: 0; left: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  background: rgba(30,30,30,0.95);
+  background: rgba(30, 30, 30, 0.95);
   padding: 1rem;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  font-family: 'Segoe UI', sans-serif;
   color: #ececec;
+  z-index: 2; /* выше карты */
 }
 
 /* группа поле+кнопка */
 .field-group {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 .field-group input {
   flex: 1;
@@ -49,13 +65,13 @@ html, body { height:100%; }
   color: #fff;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background .2s;
+  transition: background 0.2s;
 }
 .btn-small:hover {
   background: #d62828;
 }
 
-/* Заказать */
+/* ===== BUTTON “ЗАКАЗАТЬ” ===== */
 .btn-order {
   margin-top: 0.5rem;
   width: 100%;
@@ -67,7 +83,7 @@ html, body { height:100%; }
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background .2s, transform .1s;
+  transition: background 0.2s, transform 0.1s;
 }
 .btn-order:disabled {
   background: #555;
@@ -77,28 +93,81 @@ html, body { height:100%; }
   background: #d62828;
 }
 .btn-order:not(:disabled):active {
-  transform: scale(.98);
+  transform: scale(0.98);
 }
+
 /* ===== BACK BUTTON ===== */
 .btn-back {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    z-index: 1000;
-    background: rgba(30,30,30,0.8);
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
-    line-height: 1;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    transition: background .2s, transform .1s;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  background: rgba(30, 30, 30, 0.8);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-back:hover {
+  background: rgba(30, 30, 30, 1);
+  transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE ===== */
+/* Планшеты и небольшие ноутбуки */
+@media (max-width: 1024px) {
+  .order-panel {
+    padding: 0.75rem;
   }
-  .btn-back:hover {
-    background: rgba(30,30,30,1);
-    transform: translateY(-1px);
+  .btn-order {
+    font-size: 1rem;
+    padding: 0.85rem;
   }
-  
+}
+
+/* Смартфоны */
+@media (max-width: 600px) {
+  html {
+    font-size: 14px;
+  }
+  .order-panel {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  .field-group input {
+    flex: 1 1 60%;
+    min-width: calc(60% - 0.5rem);
+  }
+  .btn-small {
+    flex: 1 1 35%;
+    min-width: calc(35% - 0.5rem);
+    padding: 0.75rem 0;
+    font-size: 1rem;
+  }
+  .btn-order {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+  .btn-back {
+    width: 36px;
+    height: 36px;
+    font-size: 1.25rem;
+  }
+}
+
+/* Очень узкие экраны */
+@media (max-width: 360px) {
+  html {
+    font-size: 12px;
+  }
+  .btn-back {
+    top: 12px;
+    left: 12px;
+  }
+}
