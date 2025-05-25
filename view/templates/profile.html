@@ -84,7 +84,10 @@
   <!-- HEADER -->
   <header class="dg-header">
     <button class="dg-btn-menu" aria-label="Меню">☰</button>
-    <button class="dg-btn-profile" aria-label="Профиль">👤</button>
+    <button class="dg-btn-profile" aria-label="Профиль"
+        onclick="location.href='/user/profile'">
+  <img src="{{ url_for('static', filename='6522516.png')}}" alt="Профиль" class="dg-profile-icon"/>
+</button>
   </header>
 
   <!-- MAIN -->
