@@ -7,31 +7,39 @@ function lerp(a, b, t) {
 
 // Вычисление расстояния между двумя геокоординатами (метры)
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000, toRad = x => x * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
-  const a = Math.sin(dLat/2)**2 +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-            Math.sin(dLon/2)**2;
+  const R = 6371000,
+    toRad = (x) => (x * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1),
+    dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 // Анимация маршрута для маркера дрона
 function animateRoute(points, speed) {
-  let idx = 0, t = 0;
+  let idx = 0,
+    t = 0;
   const marker = L.marker(points[0], {
-    icon: L.icon({ iconUrl: '/static/4320278.png', iconSize: [30, 30] })
-  }).addTo(map).bindPopup('CoDrone').openPopup();
+    icon: L.icon({ iconUrl: "/static/4320278.png", iconSize: [30, 30] }),
+  })
+    .addTo(map)
+    .bindPopup("CoDrone")
+    .openPopup();
 
   function moveNext() {
     if (idx >= points.length - 1) {
-      marker.setLatLng(points[points.length - 1])
-            .bindPopup('Дрон прибыл').openPopup();
+      marker
+        .setLatLng(points[points.length - 1])
+        .bindPopup("Дрон прибыл")
+        .openPopup();
       return;
     }
     const [sLat, sLng] = points[idx],
-          [eLat, eLng] = points[idx+1],
-          dist = getDistance(sLat, sLng, eLat, eLng),
-          duration = dist / speed;
+      [eLat, eLng] = points[idx + 1],
+      dist = getDistance(sLat, sLng, eLat, eLng),
+      duration = dist / speed;
     t = 0;
 
     function step() {
@@ -43,7 +51,7 @@ function animateRoute(points, speed) {
         return;
       }
       const lat = lerp(sLat, eLat, t),
-            lng = lerp(sLng, eLng, t);
+        lng = lerp(sLng, eLng, t);
       marker.setLatLng([lat, lng]);
       map.setView([lat, lng]);
       requestAnimationFrame(step);
@@ -54,126 +62,129 @@ function animateRoute(points, speed) {
   moveNext();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // ===== Socket.IO =====
   const socket = io();
-  socket.on('connect', () => console.log('Socket.IO connected:', socket.id));
+  socket.on("connect", () => console.log("Socket.IO connected:", socket.id));
 
   // Центр карт
   const coords = [54.865556, 69.133889];
 
   // ===== Карта осадков (RainViewer) =====
-  const weatherMap = L.map('weather', {
+  const weatherMap = L.map("weather", {
     zoomControl: false,
-    attributionControl: false
+    attributionControl: false,
   }).setView(coords, 6);
 
   // 1) базовый слой OpenStreetMap
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
+    attribution: "&copy; OpenStreetMap",
   }).addTo(weatherMap);
 
   // 2) пробуем дождевой радар RainViewer
-  fetch('https://api.rainviewer.com/public/maps.json')
-    .then(res => res.json())
-    .then(data => {
-      const host = data.host;             // например "tilecache.rainviewer.com"
-      const past = (data.radar.past || []);
-      const now = (data.radar.nowcast || []);
+  // ИСПРАВЛЕНО: правильный URL API
+  fetch("https://api.rainviewer.com/public/weather-maps.json")
+    .then((res) => res.json())
+    .then((data) => {
+      const host = data.host; // например "tilecache.rainviewer.com"
+      const past = data.radar.past || [];
+      const now = data.radar.nowcast || [];
       const frames = past.concat(now);
       if (!frames.length) {
-        console.warn('RainViewer: нет ни past, ни nowcast кадров');
+        console.warn("RainViewer: нет ни past, ни nowcast кадров");
         L.control
-         .attribution({ prefix: false })
-         .addAttribution('Нет данных осадков')
-         .addTo(weatherMap);
+          .attribution({ prefix: false })
+          .addAttribution("Нет данных осадков")
+          .addTo(weatherMap);
         return;
       }
       const lastTime = frames[frames.length - 1].time;
-      L.tileLayer(
-        `https://${host}/v2/radar/${lastTime}/256/{z}/{x}/{y}/2/1_1.png`, {
-          opacity: 0.5,
-          attribution: '&copy; RainViewer'
-        }
-      ).addTo(weatherMap);
+      const lastPath = frames[frames.length - 1].path;
+      // ИСПРАВЛЕНО: новый формат URL плитки
+      L.tileLayer(`${host}${lastPath}/256/{z}/{x}/{y}/2/1_1.png`, {
+        opacity: 0.5,
+        attribution: "&copy; RainViewer",
+      }).addTo(weatherMap);
     })
-    .catch(err => {
-      console.error('Не удалось загрузить RainViewer:', err);
+    .catch((err) => {
+      console.error("Не удалось загрузить RainViewer:", err);
       L.control
         .attribution({ prefix: false })
-        .addAttribution('Ошибка загрузки осадков')
+        .addAttribution("Ошибка загрузки осадков")
         .addTo(weatherMap);
     });
 
   // ===== Карта дрона (OpenStreetMap) =====
-  window.map = L.map('map').setView(coords, 18);
+  window.map = L.map("map").setView(coords, 18);
   // Добавляем красный квадрат по координатам 54°55'17"N 69°08'12"E
-const center = [54.9214, 69.1367];
-const side = 0.0018; // ~200 метров (0.00045 * 4)
+  const center = [54.9214, 69.1367];
+  const side = 0.0018; // ~200 метров (0.00045 * 4)
 
+  const squareCoords = [
+    [center[0] - side, center[1] - side],
+    [center[0] - side, center[1] + side],
+    [center[0] + side, center[1] + side],
+    [center[0] + side, center[1] - side],
+  ];
 
-const squareCoords = [
-  [center[0] - side, center[1] - side],
-  [center[0] - side, center[1] + side],
-  [center[0] + side, center[1] + side],
-  [center[0] + side, center[1] - side]
-];
+  L.polygon(squareCoords, { color: "red" }).addTo(map);
 
-L.polygon(squareCoords, {color: 'red'}).addTo(map);
+  L.marker(center).addTo(map).bindPopup("<b>Запретная зона</b>").openPopup();
 
-L.marker(center)
-  .addTo(map)
-  .bindPopup('<b>Запретная зона</b>')
-  .openPopup();
-
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
+    attribution: "&copy; OpenStreetMap",
   }).addTo(map);
 
   // ===== Анимация маршрута =====
   const routePoints = [
     [54.865556, 69.133889],
     [54.865683, 69.134047],
-    [54.865918, 69.133639]
+    [54.865918, 69.133639],
   ];
   animateRoute(routePoints, 1);
 
   // ===== Телеметрия =====
-  socket.on('telemetry', data => {
-    document.getElementById('speed')   && (document.getElementById('speed').textContent   = data.speed);
-    document.getElementById('battery') && (document.getElementById('battery').textContent = data.battery);
-    map.setView([data.lat, data.lng]);
+  socket.on("telemetry", (data) => {
+    document.getElementById("speed") && (document.getElementById("speed").textContent = data.speed);
+    document.getElementById("battery") &&
+      (document.getElementById("battery").textContent = data.battery);
+    // map.setView([data.lat, data.lng]);
   });
 
   // ===== Управление =====
-  let inputMode = 'joystick';
-  const toggleBtn = document.getElementById('toggleInput');
-  toggleBtn?.addEventListener('click', () => {
-    inputMode = inputMode === 'joystick' ? 'keyboard' : 'joystick';
-    toggleBtn.textContent = inputMode === 'joystick'
-      ? 'Использовать клавиатуру'
-      : 'Использовать джойстик';
-    toggleBtn.classList.toggle('active', inputMode === 'keyboard');
+  let inputMode = "joystick";
+  const toggleBtn = document.getElementById("toggleInput");
+  toggleBtn?.addEventListener("click", () => {
+    inputMode = inputMode === "joystick" ? "keyboard" : "joystick";
+    toggleBtn.textContent =
+      inputMode === "joystick" ? "Использовать клавиатуру" : "Использовать джойстик";
+    toggleBtn.classList.toggle("active", inputMode === "keyboard");
   });
 
-  document.querySelectorAll('.controls button[data-cmd]')
-    .forEach(btn => btn.addEventListener('click', () => {
-      if (inputMode !== 'joystick') return;
-      socket.emit('control', { command: btn.dataset.cmd });
-    }));
+  document.querySelectorAll(".controls button[data-cmd]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      if (inputMode !== "joystick") return;
+      socket.emit("control", { command: btn.dataset.cmd });
+    })
+  );
 
-  window.addEventListener('keydown', e => {
-    if (inputMode !== 'keyboard') return;
+  window.addEventListener("keydown", (e) => {
+    if (inputMode !== "keyboard") return;
     const keyMap = {
-      W: 'UP', S: 'DOWN', A: 'RIGHT', D: 'LEFT',
-      Z: 'TILT_FORWARD', X: 'TILT_BACK',
-      C: 'TILT_LEFT', V: 'TILT_RIGHT',
-      Q: 'TAKE_OFF',   E: 'LAND'
+      W: "UP",
+      S: "DOWN",
+      A: "RIGHT",
+      D: "LEFT",
+      Z: "TILT_FORWARD",
+      X: "TILT_BACK",
+      C: "TILT_LEFT",
+      V: "TILT_RIGHT",
+      Q: "TAKE_OFF",
+      E: "LAND",
     };
     const cmd = keyMap[e.key.toUpperCase()];
-    if (cmd) socket.emit('control', { command: cmd });
+    if (cmd) socket.emit("control", { command: cmd });
   });
 });
