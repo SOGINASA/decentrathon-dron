@@ -102,12 +102,8 @@ def register_admin():
         new_admin = Admin(username=username, email=email)
         new_admin.set_password(password)
         
-        try:
-            db.session.add(new_admin)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            return f"Ошибка при регистрации: {str(e)}", 500
+        db.session.add(new_admin)
+        db.session.commit()
 
         
         login_user(new_admin)
