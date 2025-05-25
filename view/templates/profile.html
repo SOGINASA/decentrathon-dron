@@ -74,9 +74,9 @@
     <button class="dg-close-sidebar" aria-label="Закрыть меню">&times;</button>
     <ul class="dg-sidebar-list">
       <li><a href="/">Главная</a></li>
-      <li><a href="#">Способ оплаты</a></li>
-      <li><a href="#">Работа пилотом</a></li>
+      <li><a href="{{ url_for('user.payment')}}">Способ оплаты</a></li>
       <li><a href="{{ url_for('user.support')}}">Служба поддержки</a></li>
+      <li><a href="{{ url_for('auth.logout')}}">Выйти</a></li>
     </ul>
   </aside>
   <div class="dg-overlay"></div>
@@ -84,10 +84,6 @@
   <!-- HEADER -->
   <header class="dg-header">
     <button class="dg-btn-menu" aria-label="Меню">☰</button>
-    <div class="dg-current-address">
-      <span>Ваш адрес:</span>
-      <strong>Чайковского 21, подъезд 2</strong>
-    </div>
     <button class="dg-btn-profile" aria-label="Профиль">👤</button>
   </header>
 
