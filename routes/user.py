@@ -8,11 +8,11 @@ API_TOKEN = "your-secret-api-token"
 
 def require_api_token(func):
     @wraps(func)
-    def decorated(args, **kwargs):
+    def decorated(*args, **kwargs):
         token = request.headers.get('Authorization')
         if not token or token != f"Bearer {API_TOKEN}":
             return jsonify({'error': 'Unauthorized'}), 401
-        return func(args, **kwargs)
+        return func(*args, **kwargs)  # <-- передаём всё как есть
     return decorated
 
 user_bp = Blueprint('user', __name__)
@@ -77,7 +77,7 @@ def dashboard():
         for i in orders_unfiltred:
             if i.status == 'in_queue' or i.status == 'in_progress':
                 orders.append(i)
-        return render_template('us_main.html', orders=orders[:5])   
+        return render_template('us_main.html', orders=orders[:5])
     return redirect('/auth/login')
 
 def profile():
@@ -140,7 +140,6 @@ def start_order(order_id):
         return jsonify({'error': 'Missing order_id or owner_id'}), 400
 
     try:
-        order = Order.query.filter_by(id=order_id).first_or_404()
         order = Order.query.filter_by(id=order_id).first_or_404()
         order.status = 'in_progress'
         db.session.commit()
