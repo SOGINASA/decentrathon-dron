@@ -1,7 +1,5 @@
-from flask import Flask, flash, redirect, render_template, request, session, url_for, Blueprint
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from db_models import Admin, db, User, Drone, Log
+from flask import jsonify, request, Blueprint
+from db_models import db, Log, Order
 
 
 api_bp = Blueprint('api', __name__)
@@ -40,7 +38,7 @@ def add_log():
     db.session.add(log)
     db.session.commit()
 
-api_bp.add_url_rule('/active_orders', view_func=order_path, methods=['GET'])
+api_bp.add_url_rule('/active_orders', view_func=get_active_orders, methods=['GET'])
 api_bp.add_url_rule('/queue', view_func=queue_api, methods=['GET'])
 api_bp.add_url_rule('/set_active_orders/<int:order_id>', view_func=set_active_orders, methods=['POST'])
 api_bp.add_url_rule('/complete_order/<int:order_id>', view_func=complete_order, methods=['POST'])

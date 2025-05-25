@@ -1,10 +1,10 @@
-from flask import Flask, render_template, redirect, session
+from flask import Flask, redirect, session
 import os
 from flask_login import LoginManager, current_user
 from flask_cors import CORS
 
-from db_models import db, User, Admin, Drone, Order
-from routes import auth_bp, admin_bp, user_bp
+from db_models import db, User
+from routes import auth_bp, admin_bp, user_bp, api_bp
 
 # Инициализация приложения
 app = Flask(
@@ -43,6 +43,7 @@ def index():
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(user_bp, url_prefix='/user')
+app.register_blueprint(api_bp, url_prefix='/api')
 
 if __name__ == '__main__':
     with app.app_context():
