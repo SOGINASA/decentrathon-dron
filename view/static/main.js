@@ -1,121 +1,159 @@
+// main.js
+
+// Линейная интерполяция
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
+// Вычисление расстояния между двумя геокоординатами (метры)
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const toRad = x => x * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a = Math.sin(dLat / 2) ** 2 +
+  const R = 6371000, toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat/2)**2 +
             Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-            Math.sin(dLon / 2) ** 2;
+            Math.sin(dLon/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// Анимация маршрута для маркера дрона
 function animateRoute(points, speed) {
-  let index = 0;
-  let t = 0;
+  let idx = 0, t = 0;
   const marker = L.marker(points[0], {
-    icon: L.icon({
-      iconUrl: '/static/4320278.png',
-      iconSize: [30, 30]
-    })
+    icon: L.icon({ iconUrl: '/static/4320278.png', iconSize: [30, 30] })
   }).addTo(map).bindPopup('CoDrone').openPopup();
 
-  function moveToNextSegment() {
-    if (index >= points.length - 1) {
-      marker.setLatLng(points[points.length - 1]); // установить точно в финальную точку
-      marker.bindPopup('Дрон прибыл').openPopup(); // опционально: попап
+  function moveNext() {
+    if (idx >= points.length - 1) {
+      marker.setLatLng(points[points.length - 1])
+            .bindPopup('Дрон прибыл').openPopup();
       return;
     }
-  
-    const [startLat, startLng] = points[index];
-    const [endLat, endLng] = points[index + 1];
-    const segmentDistance = getDistance(startLat, startLng, endLat, endLng);
-    const segmentDuration = segmentDistance / speed;
+    const [sLat, sLng] = points[idx],
+          [eLat, eLng] = points[idx+1],
+          dist = getDistance(sLat, sLng, eLat, eLng),
+          duration = dist / speed;
     t = 0;
-  
+
     function step() {
-      t += 1 / (60 * segmentDuration);
+      t += 1 / (60 * duration);
       if (t >= 1) {
-        marker.setLatLng([endLat, endLng]); // точно в конец отрезка
-        index++;
-        moveToNextSegment();
+        marker.setLatLng([eLat, eLng]);
+        idx++;
+        moveNext();
         return;
       }
-      const lat = lerp(startLat, endLat, t);
-      const lng = lerp(startLng, endLng, t);
+      const lat = lerp(sLat, eLat, t),
+            lng = lerp(sLng, eLng, t);
       marker.setLatLng([lat, lng]);
       map.setView([lat, lng]);
       requestAnimationFrame(step);
     }
-  
     step();
   }
-  
 
-  moveToNextSegment();
+  moveNext();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ===== Socket.IO =====
   const socket = io();
   socket.on('connect', () => console.log('Socket.IO connected:', socket.id));
 
-  const coords = [54.865556, 69.133889]; // Первая точка маршрута
+  // Центр карт
+  const coords = [54.865556, 69.133889];
+
+  // ===== Карта осадков (RainViewer) =====
+  const weatherMap = L.map('weather', {
+    zoomControl: false,
+    attributionControl: false
+  }).setView(coords, 6);
+
+  // 1) базовый слой OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(weatherMap);
+
+  // 2) пробуем дождевой радар RainViewer
+  fetch('https://api.rainviewer.com/public/maps.json')
+    .then(res => res.json())
+    .then(data => {
+      const host = data.host;             // например "tilecache.rainviewer.com"
+      const past = (data.radar.past || []);
+      const now = (data.radar.nowcast || []);
+      const frames = past.concat(now);
+      if (!frames.length) {
+        console.warn('RainViewer: нет ни past, ни nowcast кадров');
+        L.control
+         .attribution({ prefix: false })
+         .addAttribution('Нет данных осадков')
+         .addTo(weatherMap);
+        return;
+      }
+      const lastTime = frames[frames.length - 1].time;
+      L.tileLayer(
+        `https://${host}/v2/radar/${lastTime}/256/{z}/{x}/{y}/2/1_1.png`, {
+          opacity: 0.5,
+          attribution: '&copy; RainViewer'
+        }
+      ).addTo(weatherMap);
+    })
+    .catch(err => {
+      console.error('Не удалось загрузить RainViewer:', err);
+      L.control
+        .attribution({ prefix: false })
+        .addAttribution('Ошибка загрузки осадков')
+        .addTo(weatherMap);
+    });
+
+  // ===== Карта дрона (OpenStreetMap) =====
   window.map = L.map('map').setView(coords, 18);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19, attribution: '&copy; OpenStreetMap'
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
   }).addTo(map);
 
-  // Координаты рассчитаны заранее
+  // ===== Анимация маршрута =====
   const routePoints = [
-    [54.865556, 69.133889],  // A
-    [54.865683, 69.134047],  // B
-    [54.865918, 69.133639]   // Новый C: ~30 метров от B по направлению 315.03°
+    [54.865556, 69.133889],
+    [54.865683, 69.134047],
+    [54.865918, 69.133639]
   ];
-  
-  const droneSpeed = 1;
+  animateRoute(routePoints, 1);
 
-  animateRoute(routePoints, droneSpeed);
-
-  // Телеметрия (если актуально)
+  // ===== Телеметрия =====
   socket.on('telemetry', data => {
-    document.getElementById('altitude') && (document.getElementById('altitude').textContent = data.altitude);
-    document.getElementById('speed') && (document.getElementById('speed').textContent = data.speed);
+    document.getElementById('speed')   && (document.getElementById('speed').textContent   = data.speed);
     document.getElementById('battery') && (document.getElementById('battery').textContent = data.battery);
-    document.getElementById('coords') && (document.getElementById('coords').textContent =
-      `${data.lat.toFixed(5)}, ${data.lng.toFixed(5)}`);
     map.setView([data.lat, data.lng]);
   });
 
-  // Код управления (клавиатура/джойстик) без изменений...
+  // ===== Управление =====
   let inputMode = 'joystick';
   const toggleBtn = document.getElementById('toggleInput');
-  toggleBtn && toggleBtn.addEventListener('click', () => {
+  toggleBtn?.addEventListener('click', () => {
     inputMode = inputMode === 'joystick' ? 'keyboard' : 'joystick';
     toggleBtn.textContent = inputMode === 'joystick'
       ? 'Использовать клавиатуру'
       : 'Использовать джойстик';
     toggleBtn.classList.toggle('active', inputMode === 'keyboard');
-    console.log('Input mode:', inputMode);
   });
+
   document.querySelectorAll('.controls button[data-cmd]')
     .forEach(btn => btn.addEventListener('click', () => {
       if (inputMode !== 'joystick') return;
-      const cmd = btn.dataset.cmd;
-      socket.emit('control', { command: cmd });
-      console.log('Joystick command:', cmd);
+      socket.emit('control', { command: btn.dataset.cmd });
     }));
+
   window.addEventListener('keydown', e => {
     if (inputMode !== 'keyboard') return;
-    const M = { W:'UP', S:'DOWN', A:'RIGHT', D:'LEFT',
-                Z:'TILT_FORWARD', X:'TILT_BACK',
-                C:'TILT_LEFT', V:'TILT_RIGHT' };
-    const cmd = M[e.key.toUpperCase()];
-    if (cmd) {
-      socket.emit('control', { command: cmd });
-      console.log(`Keyboard command: ${e.key.toUpperCase()} → ${cmd}`);
-    }
+    const keyMap = {
+      W: 'UP', S: 'DOWN', A: 'RIGHT', D: 'LEFT',
+      Z: 'TILT_FORWARD', X: 'TILT_BACK',
+      C: 'TILT_LEFT', V: 'TILT_RIGHT',
+      Q: 'TAKE_OFF',   E: 'LAND'
+    };
+    const cmd = keyMap[e.key.toUpperCase()];
+    if (cmd) socket.emit('control', { command: cmd });
   });
 });
