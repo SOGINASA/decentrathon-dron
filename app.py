@@ -3,7 +3,7 @@ import os
 from flask_login import LoginManager, current_user
 from flask_cors import CORS
 
-from db_models import db, User
+from db_models import Admin, db, User
 from routes import auth_bp, admin_bp, user_bp, api_bp
 
 # Инициализация приложения
@@ -25,9 +25,17 @@ login_manager.login_view = "auth.login"
 
 @login_manager.user_loader
 def load_user(user_id):
-    if not user_id or user_id == "None":
+    if not user_id:
         return None
-    return User.query.get(int(user_id))
+    try:
+        user_type, username = user_id.split(":", 1)
+        if user_type == "user":
+            return User.query.filter_by(username=username).first()
+        elif user_type == "admin":
+            return Admin.query.filter_by(username=username).first()
+    except ValueError:
+        return None
+
 
 # Главная страница (Мониторинг)
 @app.route('/', endpoint='index')

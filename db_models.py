@@ -20,6 +20,9 @@ class User(UserMixin, db.Model):
         
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def get_id(self):
+        return f"user:{self.username}"
 
 class Admin(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,6 +36,9 @@ class Admin(UserMixin, db.Model):
         
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def get_id(self):
+        return f"admin:{self.username}"
 
 class Drone(db.Model):
     id = db.Column(db.Integer, primary_key=True)
