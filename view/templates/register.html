@@ -10,13 +10,6 @@
   <header>
     <nav>
       <div class="logo">DroneControl</div>
-      <!-- <ul class="nav-links">
-        <li><a href="main.html">Мониторинг</a></li>
-        <li><a href="missions.html">Миссии</a></li>
-        <li><a href="logs.html">Логи</a></li>
-        <li><a href="drones.html">Дроны</a></li>
-        <li><a href="pilots.html">Пилоты</a></li>
-      </ul> -->
     </nav>
   </header>
 
@@ -29,8 +22,8 @@
       {% endif %}
 
       <form id="registerForm" method="post" action="{{ url_for('auth.register') }}">
-        <label for="reg-name">Полное имя<br/>
-          <input id="reg-name" type="text" name="name" placeholder="Иванов Иван Иванович" required>
+        <label for="reg-name">Логин<br/>
+          <input id="reg-name" type="text" name="name" placeholder="ivanov" required>
         </label>
 
         <label for="reg-email">E-mail<br/>

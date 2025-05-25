@@ -74,5 +74,10 @@ class Payment_card(db.Model):
     expiry_date = db.Column(db.String(10), nullable=False)  # Format: MM/YY
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+class Pilot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(100), nullable=False)
+
 if __name__ == '__main__':
     db.create_all()

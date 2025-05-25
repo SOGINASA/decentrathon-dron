@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Дроны — DroneControl</title>
+  <title>Пилоты — DroneControl</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
 </head>
 <body>
@@ -13,13 +13,13 @@
       <ul class="nav-links">
         <li>
           <a href="{{ url_for('index') }}"
-             class="{% if request.endpoint == 'index' %}active{% endif %}">
+             class="{% if request.endpoint=='index' %}active{% endif %}">
             Мониторинг
           </a>
         </li>
         <li>
           <a href="{{ url_for('admin.logs') }}"
-             class="{% if request.endpoint == 'logs' %}active{% endif %}">
+             class="{% if request.endpoint=='logs' %}active{% endif %}">
             Логи
           </a>
         </li>
@@ -31,7 +31,7 @@
         </li>
         <li>
           <a href="{{ url_for('admin.drones') }}"
-             class="{% if request.endpoint == 'drones' %}active{% endif %}">
+             class="{% if request.endpoint=='drones' %}active{% endif %}">
             Дроны
           </a>
         </li>
@@ -41,46 +41,44 @@
           <li><a href="{{ url_for('auth.login') }}">Вход</a></li>
           <li><a href="{{ url_for('auth.register') }}">Регистрация</a></li>
         {% endif %}
-      </ul>      
+      </ul>
     </nav>
   </header>
 
   <main>
     <!-- Форма добавления -->
     <section class="controls">
-      <h3>Добавить дрон</h3>
-      <form id="droneForm" method="post" action="{{ url_for('admin.drones') }}">
-        <label>Марка<br/>
-          <input type="text" name="mark" placeholder="Напр. DJI" required>
+      <h3>Добавить пилота</h3>
+      <form id="pilotForm" method="post" action="{{ url_for('admin.pilots') }}">
+        <label for="pilot-name">ФИО<br/>
+          <input id="pilot-name" type="text" name="name"
+                 placeholder="Иванов Иван Иванович" required>
         </label><br/><br/>
-        <label>Модель<br/>
-          <input type="text" name="model" placeholder="Напр. Phantom 4" required>
-        </label><br/><br/>
-        <label>Серийный номер<br/>
-          <input type="text" name="serial" placeholder="SN123456" required>
+        <label for="pilot-contact">Контакты<br/>
+          <input id="pilot-contact" type="text" name="phone"
+                 placeholder="+7 777 123-45-67" required>
         </label><br/><br/>
         <button class="toggle-btn" type="submit">Добавить</button>
       </form>
     </section>
 
-    <!-- Список дронов -->
+    <!-- Список пилотов -->
     <section class="missions-list">
-      <h2>Список дронов</h2>
-        {% for drone in drones %}
-        <div class="mission-card">
-          <h3>Дрон {{ loop.index }}</h3>
-          <p>Марка: {{ drone.mark }}</p>
-          <p>Модель: {{ drone.model }}</p>
-          <p>Серийный номер: {{ drone.serial }}</p>
-        </div>
-        {% endfor %}
+      <h2>Список пилотов</h2>
 
-      <!-- в дальнейшем эти карточки будут генерироваться из JS -->
+      {% if pilots %}
+        {% for pilot in pilots %}
+          <div class="mission-card">
+            <h3>Пилот #{{ pilot.id }}</h3>
+            <p>ФИО: {{ pilot.name }}</p>
+            <p>Контакты: {{ pilot.phone }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>Пилоты не найдены.</p>
+      {% endif %}
     </section>
   </main>
-
   <footer>&copy; 2025 Drone Hackathon by <span style="color: #e63946;"><b>ITshechka</b></span></footer>
-
-  <!-- <script src="../JS/drones.js"></script> -->
 </body>
 </html>

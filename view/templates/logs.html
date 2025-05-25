@@ -24,6 +24,12 @@
               </a>
             </li>
             <li>
+              <a href="{{ url_for('admin.pilots') }}"
+                class="{% if request.endpoint=='pilots' %}active{% endif %}">
+                Пилоты
+              </a>
+            </li>
+            <li>
               <a href="{{ url_for('admin.drones') }}"
                  class="{% if request.endpoint == 'drones' %}active{% endif %}">
                 Дроны

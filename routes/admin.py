@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, session, Blueprint
 from flask_login import current_user
-from db_models import db, Drone, Log
+from db_models import Pilot, db, Drone, Log
 
 
 admin_bp = Blueprint('admin', __name__)
@@ -42,7 +42,20 @@ def missions():
         return redirect('/auth/login')
     return render_template('missions.html')
 
+def pilots():
+    if not current_user.is_authenticated or not session.get('is_admin'):
+        return redirect('/auth/login')
+    if request.method == 'POST':
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+        new_pilot = Pilot(name=name, phone=phone)
+        db.session.add(new_pilot)
+        db.session.commit()
+    pilots = Pilot.query.all()
+    return render_template('pilots.html', pilots=pilots)
+
 admin_bp.add_url_rule('/drones',view_func=drones ,methods=['GET', 'POST'])
 admin_bp.add_url_rule('/dashboard', view_func=admin_dashboard, methods=['GET'])
 admin_bp.add_url_rule('/logs', view_func=logs, methods=['GET'])
 admin_bp.add_url_rule('/missions', view_func=missions, methods=['GET'])
+admin_bp.add_url_rule('/pilots', view_func=pilots, methods=['GET', 'POST'])
