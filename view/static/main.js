@@ -45,7 +45,7 @@ function animateRoute(points, speed) {
       const lat = lerp(sLat, eLat, t),
             lng = lerp(sLng, eLng, t);
       marker.setLatLng([lat, lng]);
-      map.setView([lat, lng]);
+      // map.setView([lat, lng]);
       requestAnimationFrame(step);
     }
     step();
@@ -108,6 +108,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Карта дрона (OpenStreetMap) =====
   window.map = L.map('map').setView(coords, 18);
+  // Добавляем красный квадрат по координатам 54°55'17"N 69°08'12"E
+const center = [54.9214, 69.1367];
+const side = 0.0018; // ~200 метров (0.00045 * 4)
+
+
+const squareCoords = [
+  [center[0] - side, center[1] - side],
+  [center[0] - side, center[1] + side],
+  [center[0] + side, center[1] + side],
+  [center[0] + side, center[1] - side]
+];
+
+L.polygon(squareCoords, {color: 'red'}).addTo(map);
+
+L.marker(center)
+  .addTo(map)
+  .bindPopup('<b>Запретная зона</b>')
+  .openPopup();
+
+
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap'
@@ -125,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
   socket.on('telemetry', data => {
     document.getElementById('speed')   && (document.getElementById('speed').textContent   = data.speed);
     document.getElementById('battery') && (document.getElementById('battery').textContent = data.battery);
-    map.setView([data.lat, data.lng]);
+    // map.setView([data.lat, data.lng]);
   });
 
   // ===== Управление =====
